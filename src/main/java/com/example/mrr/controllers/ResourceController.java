@@ -19,8 +19,8 @@ package com.example.mrr.controllers;
 import com.example.mrr.model.MaritimeResourceDTO;
 import com.example.mrr.model.MaritimeResourceEntity;
 import com.example.mrr.model.NamespaceEntity;
-import com.example.mrr.repositories.NamespaceRepository;
 import com.example.mrr.services.MaritimeResourceService;
+import com.example.mrr.services.NamespaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +34,7 @@ public class ResourceController {
 
     private MaritimeResourceService resourceService;
 
-    private NamespaceRepository namespaceRepository;
+    private NamespaceService namespaceService;
 
     @Autowired
     public void setResourceService(MaritimeResourceService resourceService) {
@@ -42,8 +42,8 @@ public class ResourceController {
     }
 
     @Autowired
-    public void setNamespaceRepository(NamespaceRepository namespaceRepository) {
-        this.namespaceRepository = namespaceRepository;
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
     }
 
     @PostMapping(
@@ -54,13 +54,13 @@ public class ResourceController {
     }
 
     private void handleCreation(MaritimeResourceDTO maritimeResourceDTO) {
-        MaritimeResourceEntity entity = new MaritimeResourceEntity(maritimeResourceDTO.getMrn());
+        MaritimeResourceEntity entity = new MaritimeResourceEntity(maritimeResourceDTO.getMrn(), maritimeResourceDTO.getLocation(), maritimeResourceDTO.getTitle(), maritimeResourceDTO.getDescription());
         entity.setNamespace(createNamespace(entity.getMrn()));
         resourceService.save(entity);
     }
 
     private NamespaceEntity createNamespace(String mrn) {
-        NamespaceEntity namespaceEntity = namespaceRepository.findByMrnNamespace(mrn);
+        NamespaceEntity namespaceEntity = namespaceService.getNamespaceByMrn(mrn);
         if (namespaceEntity != null) {
             return namespaceEntity;
         }

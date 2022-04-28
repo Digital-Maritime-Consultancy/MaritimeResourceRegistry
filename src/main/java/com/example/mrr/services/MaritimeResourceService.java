@@ -19,19 +19,37 @@ package com.example.mrr.services;
 import com.example.mrr.model.MaritimeResourceEntity;
 import com.example.mrr.repositories.MaritimeResourceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class MaritimeResourceService {
 
-    protected MaritimeResourceRepository repository;
+    private MaritimeResourceRepository repository;
 
     @Autowired
     public void setRepository(MaritimeResourceRepository repository) {
         this.repository = repository;
     }
 
-    public MaritimeResourceEntity save(MaritimeResourceEntity entity) {
-        return repository.save(entity);
+    @Transactional
+    public void save(MaritimeResourceEntity entity) {
+        repository.save(entity);
+    }
+
+    @Transactional
+    public void delete(MaritimeResourceEntity entity) {
+        repository.delete(entity);
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        repository.deleteById(id);
+    }
+
+    public Page<MaritimeResourceEntity> getByMrn(String mrn, Pageable pageable) {
+        return repository.getAllByMrn(mrn, pageable);
     }
 }

@@ -16,8 +16,11 @@
 
 package com.example.mrr.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.With;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -25,21 +28,36 @@ import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 @Getter
+@AllArgsConstructor
 @Node("MaritimeResource")
 public class MaritimeResourceEntity {
 
     @Id
+    @With
     @GeneratedValue
     private Long id;
 
     @Property
     private final String mrn;
 
-    @Relationship(value = "FOLLOWS")
+    @URL
+    @Property
+    private final String location;
+
+    @Property
+    private final String title;
+
+    @Property
+    private final String description;
+
     @Setter
+    @Relationship(value = "FOLLOWS")
     private NamespaceEntity namespace;
 
-    public MaritimeResourceEntity(String mrn) {
+    public MaritimeResourceEntity(String mrn, String location, String title, String description) {
         this.mrn = mrn;
+        this.location = location;
+        this.title = title;
+        this.description = description;
     }
 }

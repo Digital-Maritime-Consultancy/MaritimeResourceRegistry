@@ -17,7 +17,11 @@
 package com.example.mrr.repositories;
 
 import com.example.mrr.model.MaritimeResourceEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface MaritimeResourceRepository extends PagingAndSortingRepository<MaritimeResourceEntity, Long> {
+
+    Page<MaritimeResourceEntity> getAllByMrn(String mrn, Pageable pageable);
 }

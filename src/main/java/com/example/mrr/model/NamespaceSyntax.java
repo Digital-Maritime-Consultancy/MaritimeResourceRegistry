@@ -31,7 +31,7 @@ public class NamespaceSyntax {
     private Long id;
 
     @Property
-    @URL(regexp = "^(http|https|ftp).*")
+    @URL
     private String documentLocation;
 
     @Relationship(value = "DESCRIBES")

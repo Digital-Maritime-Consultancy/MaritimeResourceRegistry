@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package com.example.mrr.model;
+package com.example.mrr.services;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import com.example.mrr.model.NamespaceEntity;
+import com.example.mrr.repositories.NamespaceRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
+@Service
+public class NamespaceService {
 
-@Setter
-@Getter
-@AllArgsConstructor
-public class MaritimeResourceDTO implements Serializable {
-    private String mrn;
-    private String location;
-    private String title;
-    private String description;
+    private NamespaceRepository repository;
+
+    @Autowired
+    public void setRepository(NamespaceRepository repository) {
+        this.repository = repository;
+    }
+
+    public NamespaceEntity getNamespaceByMrn(String mrn) {
+        return repository.findByMrnNamespace(mrn);
+    }
 }
