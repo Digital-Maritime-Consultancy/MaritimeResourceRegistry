@@ -41,10 +41,4 @@ public class NamespaceSyntax {
 
     @Relationship(value = "DESCRIBES")
     private final NamespaceEntity namespace;
-
-    public NamespaceSyntax(String abnfSyntax, String regex, NamespaceEntity namespace) {
-        this.abnfSyntax = abnfSyntax;
-        this.regex = regex;
-        this.namespace = namespace;
-    }
 }

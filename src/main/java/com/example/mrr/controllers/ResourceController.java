@@ -19,14 +19,20 @@ package com.example.mrr.controllers;
 import com.example.mrr.model.MaritimeResourceDTO;
 import com.example.mrr.model.MaritimeResourceEntity;
 import com.example.mrr.model.NamespaceEntity;
+import com.example.mrr.model.NamespaceSyntax;
 import com.example.mrr.services.MaritimeResourceService;
 import com.example.mrr.services.NamespaceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URISyntaxException;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/resources")
@@ -49,14 +55,30 @@ public class ResourceController {
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public void createResource(@RequestBody MaritimeResourceDTO maritimeResourceDTO) {
-        handleCreation(maritimeResourceDTO);
+    public ResponseEntity<String> createResource(@RequestBody MaritimeResourceDTO maritimeResourceDTO) {
+        try {
+            handleCreation(maritimeResourceDTO);
+            return new ResponseEntity<>("The resource was successfully created", HttpStatus.CREATED);
+        } catch (URISyntaxException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
-    private void handleCreation(MaritimeResourceDTO maritimeResourceDTO) {
+    private void handleCreation(MaritimeResourceDTO maritimeResourceDTO) throws URISyntaxException {
         MaritimeResourceEntity entity = new MaritimeResourceEntity(maritimeResourceDTO.getMrn(), maritimeResourceDTO.getLocation(), maritimeResourceDTO.getTitle(), maritimeResourceDTO.getDescription());
-        entity.setNamespace(createNamespace(entity.getMrn()));
-        resourceService.save(entity);
+
+        NamespaceSyntax syntax = namespaceService.getNamespaceSyntaxByMrn(entity.getMrn());
+        if (syntax == null) {
+            throw new URISyntaxException("A syntax definition could not be found for the MRN of the resource", entity.getMrn());
+        }
+        Pattern pattern = Pattern.compile(syntax.getRegex());
+        if (pattern.matcher(entity.getMrn()).matches()) {
+            entity.setNamespace(createNamespace(entity.getMrn()));
+            resourceService.save(entity);
+        } else {
+            throw new URISyntaxException(entity.getMrn(), String.format("The MRN of the resource does not follow " +
+                    "the syntax definition for %s", syntax.getNamespace().getMrnNamespace()));
+        }
     }
 
     private NamespaceEntity createNamespace(String mrn) {

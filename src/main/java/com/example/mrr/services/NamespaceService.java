@@ -17,6 +17,7 @@
 package com.example.mrr.services;
 
 import com.example.mrr.model.NamespaceEntity;
+import com.example.mrr.model.NamespaceSyntax;
 import com.example.mrr.repositories.NamespaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,5 +34,20 @@ public class NamespaceService {
 
     public NamespaceEntity getNamespaceByMrn(String mrn) {
         return repository.findByMrnNamespace(mrn);
+    }
+
+    public NamespaceSyntax getNamespaceSyntaxByMrn(String mrn) {
+        NamespaceEntity namespace = this.getNamespaceByMrn(mrn);
+        // If a namespace entity doesn't exist for the given MRN we need to find one higher up in the tree
+        while (namespace == null) {
+            mrn = mrn.substring(0, mrn.lastIndexOf(':'));
+            namespace = this.getNamespaceByMrn(mrn);
+        }
+        NamespaceSyntax syntax = null;
+        while (syntax == null) {
+            syntax = namespace.getNamespaceSyntax();
+            namespace = namespace.getExtending();
+        }
+        return syntax;
     }
 }
