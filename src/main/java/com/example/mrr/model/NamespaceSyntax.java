@@ -18,7 +18,6 @@ package com.example.mrr.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.hibernate.validator.constraints.URL;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -34,15 +33,18 @@ public class NamespaceSyntax {
     @GeneratedValue
     private Long id;
 
-    @URL
     @Property
-    private String documentLocation;
+    private String abnfSyntax;
+
+    @Property
+    private String regex;
 
     @Relationship(value = "DESCRIBES")
     private final NamespaceEntity namespace;
 
-    public NamespaceSyntax(String documentLocation, NamespaceEntity namespace) {
-        this.documentLocation = documentLocation;
+    public NamespaceSyntax(String abnfSyntax, String regex, NamespaceEntity namespace) {
+        this.abnfSyntax = abnfSyntax;
+        this.regex = regex;
         this.namespace = namespace;
     }
 }
