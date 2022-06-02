@@ -36,6 +36,7 @@ public class NamespaceService {
         return repository.findByMrnNamespace(mrn);
     }
 
+    // Finds the syntax definition, if one exists, for the given MRN
     public NamespaceSyntax getNamespaceSyntaxByMrn(String mrn) {
         NamespaceEntity namespace = this.getNamespaceByMrn(mrn);
         // If a namespace entity doesn't exist for the given MRN we need to find one higher up in the tree
@@ -46,7 +47,7 @@ public class NamespaceService {
         NamespaceSyntax syntax = null;
         while (syntax == null) {
             syntax = namespace.getNamespaceSyntax();
-            namespace = namespace.getExtending();
+            namespace = namespace.getParentNamespace();
         }
         return syntax;
     }

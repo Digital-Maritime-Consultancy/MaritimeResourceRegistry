@@ -35,7 +35,7 @@ import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 
 @RestController
-@RequestMapping("/resources")
+@RequestMapping("/resource")
 public class ResourceController {
 
     private MaritimeResourceService resourceService;
@@ -89,7 +89,7 @@ public class ResourceController {
         NamespaceEntity entity = new NamespaceEntity(mrn);
         if (mrn.contains(":")) {
             String namespace = mrn.substring(0, mrn.lastIndexOf(':'));
-            entity.setExtending(createNamespace(namespace));
+            entity.setParentNamespace(createNamespace(namespace));
         }
         return entity;
     }

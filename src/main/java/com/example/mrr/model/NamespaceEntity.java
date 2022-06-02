@@ -41,10 +41,10 @@ public class NamespaceEntity {
 
     @Relationship(value = "EXTENDS")
     @Setter
-    private NamespaceEntity extending;
+    private NamespaceEntity parentNamespace;
 
     @Relationship(value = "EXTENDS", direction = Direction.INCOMING)
-    private List<NamespaceEntity> precedes;
+    private List<NamespaceEntity> childNamespaces;
 
     @Relationship(value = "DESCRIBES", direction = Direction.INCOMING)
     private NamespaceSyntax namespaceSyntax;
