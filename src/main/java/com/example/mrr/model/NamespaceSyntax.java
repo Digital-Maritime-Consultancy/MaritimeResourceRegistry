@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Digital Maritime Consultancy
+ * Copyright 2022 International Association of Marine Aids to Navigation and Lighthouse Authorities
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
