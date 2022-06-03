@@ -14,20 +14,34 @@
  * limitations under the License.
  */
 
-package com.example.mrr.model;
+package org.iala_aism.mrr.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Property;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
-import java.io.Serializable;
-
-@Setter
-@Getter
+@Data
 @AllArgsConstructor
-public class MaritimeResourceDTO implements Serializable {
-    private String mrn;
-    private String location;
-    private String title;
-    private String description;
+@Node("NamespaceSyntax")
+public class NamespaceSyntax {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Property
+    private String mrnNamespace;
+
+    @Property
+    private String abnfSyntax;
+
+    @Property
+    private String regex;
+
+    @Relationship(value = "DESCRIBES")
+    private final NamespaceEntity namespace;
 }

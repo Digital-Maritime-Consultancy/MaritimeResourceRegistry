@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.example.mrr.controllers;
+package org.iala_aism.mrr.controllers;
 
-import com.example.mrr.model.NamespaceSyntax;
-import com.example.mrr.model.NamespaceSyntaxDTO;
-import com.example.mrr.services.NamespaceSyntaxService;
+import org.iala_aism.mrr.model.NamespaceSyntax;
+import org.iala_aism.mrr.model.NamespaceSyntaxDTO;
+import org.iala_aism.mrr.services.NamespaceSyntaxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

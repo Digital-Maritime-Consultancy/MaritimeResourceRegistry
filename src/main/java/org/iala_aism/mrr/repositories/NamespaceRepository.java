@@ -14,20 +14,12 @@
  * limitations under the License.
  */
 
-package com.example.mrr.model;
+package org.iala_aism.mrr.repositories;
 
-import lombok.Getter;
+import org.iala_aism.mrr.model.NamespaceEntity;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-@Getter
-public class NamespaceSyntaxDTO {
+public interface NamespaceRepository extends PagingAndSortingRepository<NamespaceEntity, Long> {
 
-    private final String namespace;
-    private final String abnfSyntax;
-    private final String regex;
-
-    public NamespaceSyntaxDTO(NamespaceSyntax namespaceSyntax) {
-        this.namespace = namespaceSyntax.getNamespace().getMrnNamespace();
-        this.abnfSyntax = namespaceSyntax.getAbnfSyntax();
-        this.regex = namespaceSyntax.getRegex();
-    }
+    NamespaceEntity findByMrnNamespace(String mrnNamespace);
 }

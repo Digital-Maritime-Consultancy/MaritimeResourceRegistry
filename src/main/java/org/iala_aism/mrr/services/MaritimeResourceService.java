@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.example.mrr.services;
+package org.iala_aism.mrr.services;
 
-import com.example.mrr.model.MaritimeResourceEntity;
-import com.example.mrr.repositories.MaritimeResourceRepository;
+import org.iala_aism.mrr.model.MaritimeResourceEntity;
+import org.iala_aism.mrr.repositories.MaritimeResourceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

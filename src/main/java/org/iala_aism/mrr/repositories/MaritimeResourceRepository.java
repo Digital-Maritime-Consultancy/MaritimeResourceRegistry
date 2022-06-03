@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.example.mrr.repositories;
+package org.iala_aism.mrr.repositories;
 
-import com.example.mrr.model.MaritimeResourceEntity;
+import org.iala_aism.mrr.model.MaritimeResourceEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;

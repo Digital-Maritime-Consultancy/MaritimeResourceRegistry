@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.mrr.model;
+package org.iala_aism.mrr.model;
 
 import lombok.Getter;
 import lombok.Setter;

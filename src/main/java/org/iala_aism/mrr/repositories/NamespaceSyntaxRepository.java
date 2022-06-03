@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.example.mrr.repositories;
+package org.iala_aism.mrr.repositories;
 
-import com.example.mrr.model.NamespaceSyntax;
+import org.iala_aism.mrr.model.NamespaceSyntax;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface NamespaceSyntaxRepository extends PagingAndSortingRepository<NamespaceSyntax, Long> {

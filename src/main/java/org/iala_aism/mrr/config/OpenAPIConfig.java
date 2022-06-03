@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.mrr.config;
+package org.iala_aism.mrr.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

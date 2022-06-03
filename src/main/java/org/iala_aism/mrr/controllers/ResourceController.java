@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.example.mrr.controllers;
+package org.iala_aism.mrr.controllers;
 
-import com.example.mrr.model.MaritimeResourceDTO;
-import com.example.mrr.model.MaritimeResourceEntity;
-import com.example.mrr.model.NamespaceEntity;
-import com.example.mrr.model.NamespaceSyntax;
-import com.example.mrr.services.MaritimeResourceService;
-import com.example.mrr.services.NamespaceService;
-import com.example.mrr.services.NamespaceSyntaxService;
+import org.iala_aism.mrr.model.MaritimeResourceDTO;
+import org.iala_aism.mrr.model.MaritimeResourceEntity;
+import org.iala_aism.mrr.model.NamespaceEntity;
+import org.iala_aism.mrr.model.NamespaceSyntax;
+import org.iala_aism.mrr.services.MaritimeResourceService;
+import org.iala_aism.mrr.services.NamespaceService;
+import org.iala_aism.mrr.services.NamespaceSyntaxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

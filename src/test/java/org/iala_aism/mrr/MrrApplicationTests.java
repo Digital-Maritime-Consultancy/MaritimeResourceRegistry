@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.mrr;
+package org.iala_aism.mrr;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

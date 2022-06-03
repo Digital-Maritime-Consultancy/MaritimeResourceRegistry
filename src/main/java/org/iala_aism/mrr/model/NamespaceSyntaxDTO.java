@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package com.example.mrr;
+package org.iala_aism.mrr.model;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import lombok.Getter;
 
-@SpringBootApplication
-public class MrrApplication {
+@Getter
+public class NamespaceSyntaxDTO {
 
-    public static void main(String[] args) {
-        SpringApplication.run(MrrApplication.class, args);
+    private final String namespace;
+    private final String abnfSyntax;
+    private final String regex;
+
+    public NamespaceSyntaxDTO(NamespaceSyntax namespaceSyntax) {
+        this.namespace = namespaceSyntax.getNamespace().getMrnNamespace();
+        this.abnfSyntax = namespaceSyntax.getAbnfSyntax();
+        this.regex = namespaceSyntax.getRegex();
     }
-
 }

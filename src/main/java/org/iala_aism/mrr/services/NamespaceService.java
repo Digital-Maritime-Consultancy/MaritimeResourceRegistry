@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.example.mrr.services;
+package org.iala_aism.mrr.services;
 
-import com.example.mrr.model.NamespaceEntity;
-import com.example.mrr.model.NamespaceSyntax;
-import com.example.mrr.repositories.NamespaceRepository;
+import org.iala_aism.mrr.model.NamespaceEntity;
+import org.iala_aism.mrr.model.NamespaceSyntax;
+import org.iala_aism.mrr.repositories.NamespaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

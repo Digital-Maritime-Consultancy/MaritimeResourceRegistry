@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package com.example.mrr.repositories;
+package org.iala_aism.mrr;
 
-import com.example.mrr.model.NamespaceEntity;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-public interface NamespaceRepository extends PagingAndSortingRepository<NamespaceEntity, Long> {
+@SpringBootApplication
+public class MrrApplication {
 
-    NamespaceEntity findByMrnNamespace(String mrnNamespace);
+    public static void main(String[] args) {
+        SpringApplication.run(MrrApplication.class, args);
+    }
+
 }
