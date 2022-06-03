@@ -34,6 +34,9 @@ public class NamespaceSyntax {
     private Long id;
 
     @Property
+    private String mrnNamespace;
+
+    @Property
     private String abnfSyntax;
 
     @Property

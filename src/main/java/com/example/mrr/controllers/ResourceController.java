@@ -22,6 +22,7 @@ import com.example.mrr.model.NamespaceEntity;
 import com.example.mrr.model.NamespaceSyntax;
 import com.example.mrr.services.MaritimeResourceService;
 import com.example.mrr.services.NamespaceService;
+import com.example.mrr.services.NamespaceSyntaxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,8 +40,8 @@ import java.util.regex.Pattern;
 public class ResourceController {
 
     private MaritimeResourceService resourceService;
-
     private NamespaceService namespaceService;
+    private NamespaceSyntaxService namespaceSyntaxService;
 
     @Autowired
     public void setResourceService(MaritimeResourceService resourceService) {
@@ -50,6 +51,11 @@ public class ResourceController {
     @Autowired
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
+    }
+
+    @Autowired
+    public void setNamespaceSyntaxService(NamespaceSyntaxService namespaceSyntaxService) {
+        this.namespaceSyntaxService = namespaceSyntaxService;
     }
 
     @PostMapping(
@@ -67,7 +73,7 @@ public class ResourceController {
     private void handleCreation(MaritimeResourceDTO maritimeResourceDTO) throws URISyntaxException {
         MaritimeResourceEntity entity = new MaritimeResourceEntity(maritimeResourceDTO.getMrn(), maritimeResourceDTO.getLocation(), maritimeResourceDTO.getTitle(), maritimeResourceDTO.getDescription());
 
-        NamespaceSyntax syntax = namespaceService.getNamespaceSyntaxByMrn(entity.getMrn());
+        NamespaceSyntax syntax = namespaceSyntaxService.findNamespaceSyntaxForMrn(entity.getMrn());
         if (syntax == null) {
             throw new URISyntaxException("A syntax definition could not be found for the MRN of the resource", entity.getMrn());
         }

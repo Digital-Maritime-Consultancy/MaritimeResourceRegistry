@@ -18,7 +18,7 @@ package com.example.mrr.controllers;
 
 import com.example.mrr.model.NamespaceSyntax;
 import com.example.mrr.model.NamespaceSyntaxDTO;
-import com.example.mrr.services.NamespaceService;
+import com.example.mrr.services.NamespaceSyntaxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,11 +32,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/syntax")
 public class NamespaceSyntaxController {
 
-    private NamespaceService namespaceService;
+    private NamespaceSyntaxService namespaceSyntaxService;
 
     @Autowired
-    public void setNamespaceService(NamespaceService namespaceService) {
-        this.namespaceService = namespaceService;
+    public void setNamespaceSyntaxService(NamespaceSyntaxService namespaceSyntaxService) {
+        this.namespaceSyntaxService = namespaceSyntaxService;
     }
 
     @GetMapping(
@@ -44,7 +44,7 @@ public class NamespaceSyntaxController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<NamespaceSyntaxDTO> getNamespaceSyntaxForMrn(@PathVariable String mrn) {
-        NamespaceSyntax syntax = namespaceService.getNamespaceSyntaxByMrn(mrn);
+        NamespaceSyntax syntax = namespaceSyntaxService.findNamespaceSyntaxForMrn(mrn);
         if (syntax != null) {
             NamespaceSyntaxDTO syntaxDTO = new NamespaceSyntaxDTO(syntax);
             return new ResponseEntity<>(syntaxDTO, HttpStatus.OK);

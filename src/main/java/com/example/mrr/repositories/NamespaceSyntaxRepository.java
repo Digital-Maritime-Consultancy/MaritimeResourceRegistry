@@ -20,4 +20,5 @@ import com.example.mrr.model.NamespaceSyntax;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface NamespaceSyntaxRepository extends PagingAndSortingRepository<NamespaceSyntax, Long> {
+    NamespaceSyntax findByMrnNamespace(String mrnNamespace);
 }
