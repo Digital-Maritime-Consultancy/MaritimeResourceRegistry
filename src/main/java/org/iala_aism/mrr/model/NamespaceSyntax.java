@@ -18,6 +18,7 @@ package org.iala_aism.mrr.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -26,6 +27,7 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Node("NamespaceSyntax")
 public class NamespaceSyntax {
 
@@ -43,5 +45,5 @@ public class NamespaceSyntax {
     private String regex;
 
     @Relationship(value = "DESCRIBES")
-    private final NamespaceEntity namespace;
+    private NamespaceEntity namespace;
 }

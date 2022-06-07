@@ -16,7 +16,9 @@
 
 package org.iala_aism.mrr.model;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
@@ -28,7 +30,9 @@ import java.util.List;
 
 import static org.springframework.data.neo4j.core.schema.Relationship.Direction;
 
-@Getter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Node("Namespace")
 public class NamespaceEntity {
 
@@ -37,7 +41,7 @@ public class NamespaceEntity {
     private Long id;
 
     @Property
-    private final String mrnNamespace;
+    private String mrnNamespace;
 
     @Relationship(value = "EXTENDS")
     @Setter
