@@ -19,8 +19,7 @@ package org.iala_aism.mrr.model;
 import lombok.Getter;
 
 @Getter
-public class NamespaceSyntaxDTO {
-
+public class NamespaceSyntaxDTO implements JsonSerializable {
     private final String namespace;
     private final String abnfSyntax;
     private final String regex;

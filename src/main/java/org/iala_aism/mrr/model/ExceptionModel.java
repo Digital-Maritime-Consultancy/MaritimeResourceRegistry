@@ -18,16 +18,17 @@ package org.iala_aism.mrr.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import java.io.Serializable;
-
-@Setter
 @Getter
+@ToString
 @AllArgsConstructor
-public class MaritimeResourceDTO implements JsonSerializable {
-    private String mrn;
-    private String location;
-    private String title;
-    private String description;
+@NoArgsConstructor
+public class ExceptionModel implements JsonSerializable {
+    private long timestamp;
+    private int status;
+    private String error;
+    private String message;
+    private String path;
 }

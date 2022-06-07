@@ -16,18 +16,10 @@
 
 package org.iala_aism.mrr.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.io.Serializable;
-
-@Setter
-@Getter
-@AllArgsConstructor
-public class MaritimeResourceDTO implements JsonSerializable {
-    private String mrn;
-    private String location;
-    private String title;
-    private String description;
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
+public interface JsonSerializable {
 }
