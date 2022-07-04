@@ -16,6 +16,7 @@
 
 package org.iala_aism.mrr.controllers;
 
+import org.iala_aism.mrr.exceptions.MrrRestException;
 import org.iala_aism.mrr.model.MaritimeResourceDTO;
 import org.iala_aism.mrr.model.MaritimeResourceEntity;
 import org.iala_aism.mrr.model.NamespaceEntity;
@@ -23,21 +24,30 @@ import org.iala_aism.mrr.model.NamespaceSyntax;
 import org.iala_aism.mrr.services.MaritimeResourceService;
 import org.iala_aism.mrr.services.NamespaceService;
 import org.iala_aism.mrr.services.NamespaceSyntaxService;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/resource")
-public class ResourceController {
+public class MaritimeResourceController {
 
     private MaritimeResourceService resourceService;
     private NamespaceService namespaceService;
@@ -58,20 +68,45 @@ public class ResourceController {
         this.namespaceSyntaxService = namespaceSyntaxService;
     }
 
-    @PostMapping(
-            consumes = MediaType.APPLICATION_JSON_VALUE
+    @GetMapping(
+            value = "/{mrn}",
+            produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<String> createResource(@RequestBody MaritimeResourceDTO maritimeResourceDTO) {
+    public Page<MaritimeResourceDTO> getResourcesForMrn(@PathVariable String mrn, @ParameterObject Pageable pageable) {
+        Page<MaritimeResourceEntity> resourceEntities = resourceService.getByMrn(mrn, pageable);
+        return resourceEntities.map(MaritimeResourceDTO::new);
+    }
+
+    @GetMapping(
+            value = "/id/{resourceId}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<MaritimeResourceDTO> getResourceById(@PathVariable Long resourceId, HttpServletRequest request) throws MrrRestException {
+        Optional<MaritimeResourceEntity> resourceEntityOptional = resourceService.getById(resourceId);
+        MaritimeResourceEntity resourceEntity = resourceEntityOptional.orElseThrow(
+                () -> new MrrRestException(HttpStatus.NOT_FOUND, "The requested resource could not be found",
+                        request.getServletPath())
+        );
+        return new ResponseEntity<>(new MaritimeResourceDTO(resourceEntity), HttpStatus.OK);
+    }
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MaritimeResourceDTO> createResource(@RequestBody MaritimeResourceDTO maritimeResourceDTO, HttpServletRequest request) throws MrrRestException {
         try {
-            handleCreation(maritimeResourceDTO);
-            return new ResponseEntity<>("The resource was successfully created", HttpStatus.CREATED);
+            MaritimeResourceEntity newResource = handleCreation(maritimeResourceDTO);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(new URI("/resource/id/" + newResource.getId().toString()));
+            return new ResponseEntity<>(new MaritimeResourceDTO(newResource), headers, HttpStatus.CREATED);
         } catch (URISyntaxException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            throw new MrrRestException(HttpStatus.BAD_REQUEST, e.getMessage(), request.getServletPath());
         }
     }
 
-    private void handleCreation(MaritimeResourceDTO maritimeResourceDTO) throws URISyntaxException {
-        MaritimeResourceEntity entity = new MaritimeResourceEntity(maritimeResourceDTO.getMrn(), maritimeResourceDTO.getLocation(), maritimeResourceDTO.getTitle(), maritimeResourceDTO.getDescription());
+
+
+    private MaritimeResourceEntity handleCreation(MaritimeResourceDTO maritimeResourceDTO) throws URISyntaxException {
+        MaritimeResourceEntity entity = new MaritimeResourceEntity(maritimeResourceDTO.getMrn(),
+                maritimeResourceDTO.getLocation(), maritimeResourceDTO.getTitle(), maritimeResourceDTO.getDescription());
 
         NamespaceSyntax syntax = namespaceSyntaxService.findNamespaceSyntaxForMrn(entity.getMrn());
         if (syntax == null) {
@@ -80,10 +115,11 @@ public class ResourceController {
         Pattern pattern = Pattern.compile(syntax.getRegex());
         if (pattern.matcher(entity.getMrn()).matches()) {
             entity.setNamespace(createNamespace(entity.getMrn()));
-            resourceService.save(entity);
+            return resourceService.save(entity);
         } else {
-            throw new URISyntaxException(entity.getMrn(), String.format("The MRN of the resource does not follow " +
-                    "the syntax definition for %s", syntax.getNamespace().getMrnNamespace()));
+            throw new URISyntaxException(entity.getMrn(),
+                    String.format("The MRN of the resource does not follow the syntax definition for %s",
+                            syntax.getNamespace().getMrnNamespace()));
         }
     }
 

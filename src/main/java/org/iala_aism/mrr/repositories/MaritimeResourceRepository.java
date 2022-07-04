@@ -21,7 +21,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.util.Optional;
+
 public interface MaritimeResourceRepository extends PagingAndSortingRepository<MaritimeResourceEntity, Long> {
 
     Page<MaritimeResourceEntity> getAllByMrn(String mrn, Pageable pageable);
+    @Override
+    Optional<MaritimeResourceEntity> findById(Long id);
 }

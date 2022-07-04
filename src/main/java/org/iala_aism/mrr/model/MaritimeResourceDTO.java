@@ -20,8 +20,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
-
 @Setter
 @Getter
 @AllArgsConstructor
@@ -30,4 +28,13 @@ public class MaritimeResourceDTO implements JsonSerializable {
     private String location;
     private String title;
     private String description;
+    private long id;
+
+    public MaritimeResourceDTO(MaritimeResourceEntity maritimeResourceEntity) {
+        this.mrn = maritimeResourceEntity.getMrn();
+        this.location = maritimeResourceEntity.getLocation();
+        this.title = maritimeResourceEntity.getTitle();
+        this.description = maritimeResourceEntity.getDescription();
+        this.id = maritimeResourceEntity.getId();
+    }
 }

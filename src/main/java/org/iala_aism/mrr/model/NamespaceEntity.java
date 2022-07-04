@@ -26,7 +26,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.springframework.data.neo4j.core.schema.Relationship.Direction;
 
@@ -48,7 +48,7 @@ public class NamespaceEntity {
     private NamespaceEntity parentNamespace;
 
     @Relationship(value = "EXTENDS", direction = Direction.INCOMING)
-    private List<NamespaceEntity> childNamespaces;
+    private Set<NamespaceEntity> childNamespaces;
 
     @Relationship(value = "DESCRIBES", direction = Direction.INCOMING)
     private NamespaceSyntax namespaceSyntax;

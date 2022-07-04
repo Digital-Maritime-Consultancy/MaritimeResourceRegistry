@@ -24,6 +24,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class MaritimeResourceService {
 
@@ -35,8 +37,8 @@ public class MaritimeResourceService {
     }
 
     @Transactional
-    public void save(MaritimeResourceEntity entity) {
-        repository.save(entity);
+    public MaritimeResourceEntity save(MaritimeResourceEntity entity) {
+        return repository.save(entity);
     }
 
     @Transactional
@@ -47,6 +49,10 @@ public class MaritimeResourceService {
     @Transactional
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    public Optional<MaritimeResourceEntity> getById(Long id) {
+        return repository.findById(id);
     }
 
     public Page<MaritimeResourceEntity> getByMrn(String mrn, Pageable pageable) {

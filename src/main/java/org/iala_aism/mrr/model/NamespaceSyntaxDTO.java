@@ -23,10 +23,12 @@ public class NamespaceSyntaxDTO implements JsonSerializable {
     private final String namespace;
     private final String abnfSyntax;
     private final String regex;
+    private final long id;
 
     public NamespaceSyntaxDTO(NamespaceSyntax namespaceSyntax) {
         this.namespace = namespaceSyntax.getNamespace().getMrnNamespace();
         this.abnfSyntax = namespaceSyntax.getAbnfSyntax();
         this.regex = namespaceSyntax.getRegex();
+        this.id = namespaceSyntax.getId();
     }
 }
