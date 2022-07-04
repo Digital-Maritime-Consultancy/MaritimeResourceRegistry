@@ -18,11 +18,13 @@ package org.iala_aism.mrr.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class MaritimeResourceDTO implements JsonSerializable {
     private String mrn;
     private String location;

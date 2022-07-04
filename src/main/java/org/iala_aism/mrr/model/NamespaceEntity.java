@@ -17,7 +17,7 @@
 package org.iala_aism.mrr.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
@@ -30,7 +30,8 @@ import java.util.Set;
 
 import static org.springframework.data.neo4j.core.schema.Relationship.Direction;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Node("Namespace")
