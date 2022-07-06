@@ -19,7 +19,6 @@ package org.iala_aism.mrr.controllers;
 import org.iala_aism.mrr.exceptions.MrrRestException;
 import org.iala_aism.mrr.model.MaritimeResourceDTO;
 import org.iala_aism.mrr.model.MaritimeResourceEntity;
-import org.iala_aism.mrr.model.NamespaceEntity;
 import org.iala_aism.mrr.model.NamespaceSyntax;
 import org.iala_aism.mrr.services.MaritimeResourceService;
 import org.iala_aism.mrr.services.NamespaceService;
@@ -90,7 +89,10 @@ public class MaritimeResourceController {
         return new ResponseEntity<>(new MaritimeResourceDTO(resourceEntity), HttpStatus.OK);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<MaritimeResourceDTO> createResource(@RequestBody MaritimeResourceDTO maritimeResourceDTO, HttpServletRequest request) throws MrrRestException {
         try {
             MaritimeResourceEntity newResource = handleCreation(maritimeResourceDTO);
@@ -102,8 +104,6 @@ public class MaritimeResourceController {
         }
     }
 
-
-
     private MaritimeResourceEntity handleCreation(MaritimeResourceDTO maritimeResourceDTO) throws URISyntaxException {
         MaritimeResourceEntity entity = new MaritimeResourceEntity(maritimeResourceDTO.getMrn(),
                 maritimeResourceDTO.getLocation(), maritimeResourceDTO.getTitle(), maritimeResourceDTO.getDescription());
@@ -114,25 +114,12 @@ public class MaritimeResourceController {
         }
         Pattern pattern = Pattern.compile(syntax.getRegex());
         if (pattern.matcher(entity.getMrn()).matches()) {
-            entity.setNamespace(createNamespace(entity.getMrn()));
+            entity.setNamespace(namespaceService.createNamespace(entity.getMrn()));
             return resourceService.save(entity);
         } else {
             throw new URISyntaxException(entity.getMrn(),
                     String.format("The MRN of the resource does not follow the syntax definition for %s",
                             syntax.getNamespace().getMrnNamespace()));
         }
-    }
-
-    private NamespaceEntity createNamespace(String mrn) {
-        NamespaceEntity namespaceEntity = namespaceService.getNamespaceByMrn(mrn);
-        if (namespaceEntity != null) {
-            return namespaceEntity;
-        }
-        NamespaceEntity entity = new NamespaceEntity(mrn);
-        if (mrn.contains(":")) {
-            String namespace = mrn.substring(0, mrn.lastIndexOf(':'));
-            entity.setParentNamespace(createNamespace(namespace));
-        }
-        return entity;
     }
 }

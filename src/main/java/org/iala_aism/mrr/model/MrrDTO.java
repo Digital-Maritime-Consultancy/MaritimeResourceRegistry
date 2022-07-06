@@ -25,18 +25,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MaritimeResourceDTO implements JsonSerializable {
-    private String mrn;
-    private String location;
-    private String title;
-    private String description;
-    private long id;
+public class MrrDTO implements JsonSerializable {
+    private Long id;
+    private String mrnNamespace;
+    private String endpoint;
 
-    public MaritimeResourceDTO(MaritimeResourceEntity maritimeResourceEntity) {
-        this.mrn = maritimeResourceEntity.getMrn();
-        this.location = maritimeResourceEntity.getLocation();
-        this.title = maritimeResourceEntity.getTitle();
-        this.description = maritimeResourceEntity.getDescription();
-        this.id = maritimeResourceEntity.getId();
+    public MrrDTO(MrrEntity mrrEntity) {
+        this.id = mrrEntity.getId();
+        this.mrnNamespace = mrrEntity.getMrnNamespace();
+        this.endpoint = mrrEntity.getEndpoint();
     }
 }

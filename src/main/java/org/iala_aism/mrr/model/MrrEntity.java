@@ -20,22 +20,19 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
-import java.util.Set;
-
-import static org.springframework.data.neo4j.core.schema.Relationship.Direction;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Node("Namespace")
-public class NamespaceEntity {
+@Node("MRR")
+public class MrrEntity {
 
     @Id
     @GeneratedValue
@@ -44,19 +41,15 @@ public class NamespaceEntity {
     @Property
     private String mrnNamespace;
 
-    @Relationship(value = "EXTENDS")
-    private NamespaceEntity parentNamespace;
+    @URL(protocol = "https")
+    @Property
+    private String endpoint;
 
-    @Relationship(value = "EXTENDS", direction = Direction.INCOMING)
-    private Set<NamespaceEntity> childNamespaces;
+    @Relationship(value = "CONTAINS")
+    private NamespaceEntity namespace;
 
-    @Relationship(value = "DESCRIBES", direction = Direction.INCOMING)
-    private NamespaceSyntax namespaceSyntax;
-
-    @Relationship(value = "CONTAINS", direction = Direction.INCOMING)
-    private MrrEntity mrr;
-
-    public NamespaceEntity(String mrnNamespace) {
+    public MrrEntity(String mrnNamespace, String endpoint) {
         this.mrnNamespace = mrnNamespace;
+        this.endpoint = endpoint;
     }
 }

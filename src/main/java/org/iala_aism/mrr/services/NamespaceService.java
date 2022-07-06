@@ -51,4 +51,17 @@ public class NamespaceService {
         }
         return syntax;
     }
+
+    public NamespaceEntity createNamespace(String mrn) {
+        NamespaceEntity namespaceEntity = getNamespaceByMrn(mrn);
+        if (namespaceEntity != null) {
+            return namespaceEntity;
+        }
+        NamespaceEntity entity = new NamespaceEntity(mrn);
+        if (mrn.contains(":")) {
+            String namespace = mrn.substring(0, mrn.lastIndexOf(':'));
+            entity.setParentNamespace(createNamespace(namespace));
+        }
+        return entity;
+    }
 }
