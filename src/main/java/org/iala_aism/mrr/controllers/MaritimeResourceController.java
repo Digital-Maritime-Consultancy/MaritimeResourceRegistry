@@ -79,8 +79,17 @@ public class MaritimeResourceController {
             value = "/{mrn}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public Page<MaritimeResourceDTO> getResourcesForMrn(@PathVariable String mrn, @ParameterObject Pageable pageable) {
+    public Page<MaritimeResourceDTO> getResourcesForMrn(@PathVariable String mrn, @ParameterObject Pageable pageable, HttpServletRequest request) throws MrrRestException {
         Page<MaritimeResourceEntity> resourceEntities = resourceService.getByMrn(mrn, pageable);
+
+        if (resourceEntities.isEmpty()) {
+            Optional<MrrEntity> maybeMrr = mrrService.searchForEarlierMrr(mrn);
+            if (maybeMrr.isPresent())
+                throw new MrrRestException(HttpStatus.SEE_OTHER,
+                        "Please repeat your query in the MRR for the namespace " + maybeMrr.get().getMrnNamespace(),
+                        request.getServletPath(), maybeMrr.get().getEndpoint() + request.getServletPath());
+        }
+
         return resourceEntities.map(MaritimeResourceDTO::new);
     }
 

@@ -31,6 +31,7 @@ public class MrrRestException extends Exception {
     protected final String error;
     protected final String errorMessage;
     protected final String path;
+    protected final String location;
     protected final long timestamp;
 
     public MrrRestException(HttpStatus status, String errorMessage, String path) {
@@ -38,6 +39,17 @@ public class MrrRestException extends Exception {
         this.status = status;
         this.errorMessage = errorMessage;
         this.path = path;
+        this.location = null;
+        this.timestamp = Instant.now().toEpochMilli();
+        this.error = status.getReasonPhrase();
+    }
+
+    public MrrRestException(HttpStatus status, String errorMessage, String path, String location) {
+        super(errorMessage);
+        this.status = status;
+        this.errorMessage = errorMessage;
+        this.path = path;
+        this.location = location;
         this.timestamp = Instant.now().toEpochMilli();
         this.error = status.getReasonPhrase();
     }

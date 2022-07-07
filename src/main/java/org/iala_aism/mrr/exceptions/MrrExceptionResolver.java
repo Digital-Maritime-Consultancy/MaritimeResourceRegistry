@@ -23,15 +23,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 @ControllerAdvice
 public class MrrExceptionResolver {
 
     @ExceptionHandler(MrrRestException.class)
-    public ResponseEntity<ExceptionModel> processRestError(MrrRestException e) {
+    public ResponseEntity<ExceptionModel> processRestError(MrrRestException e) throws URISyntaxException {
         // mimics the standard spring error structure on exceptions
         ExceptionModel exp = new ExceptionModel(e.timestamp, e.status.value(), e.error, e.errorMessage, e.path);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        if (e.location != null) {
+            httpHeaders.setLocation(new URI(e.location));
+        }
         return new ResponseEntity<>(exp, httpHeaders, e.status);
     }
 }
