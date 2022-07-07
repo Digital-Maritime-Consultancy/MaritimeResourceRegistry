@@ -16,8 +16,11 @@
 
 package org.iala_aism.mrr.controllers;
 
+import org.iala_aism.mrr.exceptions.MrrRestException;
+import org.iala_aism.mrr.model.MrrEntity;
 import org.iala_aism.mrr.model.NamespaceSyntax;
 import org.iala_aism.mrr.model.NamespaceSyntaxDTO;
+import org.iala_aism.mrr.services.MrrService;
 import org.iala_aism.mrr.services.NamespaceSyntaxService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,23 +31,47 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/syntax")
 public class NamespaceSyntaxController {
 
     private NamespaceSyntaxService namespaceSyntaxService;
+    private MrrService mrrService;
 
     @Autowired
     public void setNamespaceSyntaxService(NamespaceSyntaxService namespaceSyntaxService) {
         this.namespaceSyntaxService = namespaceSyntaxService;
     }
 
+    @Autowired
+    public void setMrrService(MrrService mrrService) {
+        this.mrrService = mrrService;
+    }
+
     @GetMapping(
             path = "/{mrn}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<NamespaceSyntaxDTO> getNamespaceSyntaxForMrn(@PathVariable String mrn) {
-        NamespaceSyntax syntax = namespaceSyntaxService.findNamespaceSyntaxForMrn(mrn);
+    public ResponseEntity<NamespaceSyntaxDTO> getNamespaceSyntaxForMrn(@PathVariable String mrn, HttpServletRequest request) throws MrrRestException {
+        // Start by checking if there is a syntax for the specific MRN
+        NamespaceSyntax syntax = namespaceSyntaxService.getNamespaceSyntax(mrn);
+        if (syntax != null) {
+            NamespaceSyntaxDTO syntaxDTO = new NamespaceSyntaxDTO(syntax);
+            return new ResponseEntity<>(syntaxDTO, HttpStatus.OK);
+        }
+        // If there isn't check if there is another MRR for the MRN
+        Optional<MrrEntity> maybeMrr = mrrService.searchForEarlierMrr(mrn);
+        if (maybeMrr.isPresent()) {
+            MrrEntity mrr = maybeMrr.get();
+            throw new MrrRestException(HttpStatus.SEE_OTHER,
+                    "Please repeat your query in the MRR for the namespace " + mrr.getMrnNamespace(),
+                    request.getServletPath(), mrr.getEndpoint() + request.getServletPath());
+        }
+        // If none of the above succeed we traverse up the tree and return the result if we find a syntax
+        syntax = namespaceSyntaxService.findNamespaceSyntaxForMrn(mrn);
         if (syntax != null) {
             NamespaceSyntaxDTO syntaxDTO = new NamespaceSyntaxDTO(syntax);
             return new ResponseEntity<>(syntaxDTO, HttpStatus.OK);
