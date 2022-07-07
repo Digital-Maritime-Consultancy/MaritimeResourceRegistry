@@ -19,8 +19,10 @@ package org.iala_aism.mrr.controllers;
 import org.iala_aism.mrr.exceptions.MrrRestException;
 import org.iala_aism.mrr.model.MaritimeResourceDTO;
 import org.iala_aism.mrr.model.MaritimeResourceEntity;
+import org.iala_aism.mrr.model.MrrEntity;
 import org.iala_aism.mrr.model.NamespaceSyntax;
 import org.iala_aism.mrr.services.MaritimeResourceService;
+import org.iala_aism.mrr.services.MrrService;
 import org.iala_aism.mrr.services.NamespaceService;
 import org.iala_aism.mrr.services.NamespaceSyntaxService;
 import org.springdoc.api.annotations.ParameterObject;
@@ -51,6 +53,7 @@ public class MaritimeResourceController {
     private MaritimeResourceService resourceService;
     private NamespaceService namespaceService;
     private NamespaceSyntaxService namespaceSyntaxService;
+    private MrrService mrrService;
 
     @Autowired
     public void setResourceService(MaritimeResourceService resourceService) {
@@ -65,6 +68,11 @@ public class MaritimeResourceController {
     @Autowired
     public void setNamespaceSyntaxService(NamespaceSyntaxService namespaceSyntaxService) {
         this.namespaceSyntaxService = namespaceSyntaxService;
+    }
+
+    @Autowired
+    public void setMrrService(MrrService mrrService) {
+        this.mrrService = mrrService;
     }
 
     @GetMapping(
@@ -95,7 +103,7 @@ public class MaritimeResourceController {
     )
     public ResponseEntity<MaritimeResourceDTO> createResource(@RequestBody MaritimeResourceDTO maritimeResourceDTO, HttpServletRequest request) throws MrrRestException {
         try {
-            MaritimeResourceEntity newResource = handleCreation(maritimeResourceDTO);
+            MaritimeResourceEntity newResource = handleCreation(maritimeResourceDTO, request);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(new URI("/resource/id/" + newResource.getId().toString()));
             return new ResponseEntity<>(new MaritimeResourceDTO(newResource), headers, HttpStatus.CREATED);
@@ -104,9 +112,16 @@ public class MaritimeResourceController {
         }
     }
 
-    private MaritimeResourceEntity handleCreation(MaritimeResourceDTO maritimeResourceDTO) throws URISyntaxException {
+    private MaritimeResourceEntity handleCreation(MaritimeResourceDTO maritimeResourceDTO, HttpServletRequest request) throws URISyntaxException, MrrRestException {
         MaritimeResourceEntity entity = new MaritimeResourceEntity(maritimeResourceDTO.getMrn(),
                 maritimeResourceDTO.getLocation(), maritimeResourceDTO.getTitle(), maritimeResourceDTO.getDescription());
+
+        Optional<MrrEntity> maybeMrr = mrrService.searchForEarlierMrr(maritimeResourceDTO.getMrn());
+        if (maybeMrr.isPresent()) {
+            throw new MrrRestException(HttpStatus.BAD_REQUEST,
+                    String.format("An MRR for the namespace %s exists. Please register your resource there",
+                            maybeMrr.get().getMrnNamespace()), request.getServletPath());
+        }
 
         NamespaceSyntax syntax = namespaceSyntaxService.findNamespaceSyntaxForMrn(entity.getMrn());
         if (syntax == null) {

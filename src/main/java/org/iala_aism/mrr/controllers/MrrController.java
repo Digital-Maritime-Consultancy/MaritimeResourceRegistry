@@ -87,7 +87,7 @@ public class MrrController {
 
     private MrrEntity handleCreation(MrrDTO mrrDTO, HttpServletRequest request) throws MrrRestException {
         NamespaceEntity namespace = namespaceService.getNamespaceByMrn(mrrDTO.getMrnNamespace());
-        MrrEntity mrrEntity = searchForLaterMrr(namespace);
+        MrrEntity mrrEntity = mrrService.searchForLaterMrr(namespace);
         if (mrrEntity != null) {
             throw new MrrRestException(HttpStatus.BAD_REQUEST,
                     "An MRR entry already exists for this or a later MRN namespace: " + mrrEntity.getMrnNamespace(),
@@ -99,20 +99,5 @@ public class MrrController {
         MrrEntity newMrr = new MrrEntity(mrrDTO.getMrnNamespace(), mrrDTO.getEndpoint());
         newMrr.setNamespace(namespace);
         return mrrService.save(newMrr);
-    }
-
-    private MrrEntity searchForLaterMrr(NamespaceEntity namespace) {
-        if (namespace == null) {
-            return null;
-        }
-        if (namespace.getMrr() != null) {
-            return namespace.getMrr();
-        }
-        for (NamespaceEntity ns : namespace.getChildNamespaces()) {
-            MrrEntity mrr = searchForLaterMrr(ns);
-            if (mrr != null)
-                return mrr;
-        }
-        return null;
     }
 }

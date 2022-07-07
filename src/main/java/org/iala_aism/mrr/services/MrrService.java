@@ -17,6 +17,7 @@
 package org.iala_aism.mrr.services;
 
 import org.iala_aism.mrr.model.MrrEntity;
+import org.iala_aism.mrr.model.NamespaceEntity;
 import org.iala_aism.mrr.repositories.MrrRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,5 +56,29 @@ public class MrrService {
 
     public Optional<MrrEntity> getById(Long id) {
         return repository.findById(id);
+    }
+
+    public Optional<MrrEntity> searchForEarlierMrr(String mrnNamespace) {
+        Optional<MrrEntity> maybeMrr = getByMrnNamespace(mrnNamespace);
+        while (maybeMrr.isEmpty()) {
+            mrnNamespace = mrnNamespace.substring(0, mrnNamespace.lastIndexOf(':'));
+            maybeMrr = getByMrnNamespace(mrnNamespace);
+        }
+        return maybeMrr;
+    }
+
+    public MrrEntity searchForLaterMrr(NamespaceEntity namespace) {
+        if (namespace == null) {
+            return null;
+        }
+        if (namespace.getMrr() != null) {
+            return namespace.getMrr();
+        }
+        for (NamespaceEntity ns : namespace.getChildNamespaces()) {
+            MrrEntity mrr = searchForLaterMrr(ns);
+            if (mrr != null)
+                return mrr;
+        }
+        return null;
     }
 }
