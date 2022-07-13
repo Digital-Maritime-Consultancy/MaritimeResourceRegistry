@@ -60,7 +60,7 @@ public class MrrService {
 
     public Optional<MrrEntity> searchForEarlierMrr(String mrnNamespace) {
         Optional<MrrEntity> maybeMrr = getByMrnNamespace(mrnNamespace);
-        while (maybeMrr.isEmpty()) {
+        while (maybeMrr.isEmpty() && mrnNamespace.contains(":")) {
             mrnNamespace = mrnNamespace.substring(0, mrnNamespace.lastIndexOf(':'));
             maybeMrr = getByMrnNamespace(mrnNamespace);
         }

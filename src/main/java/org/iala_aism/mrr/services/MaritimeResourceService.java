@@ -55,7 +55,11 @@ public class MaritimeResourceService {
         return repository.findById(id);
     }
 
-    public Page<MaritimeResourceEntity> getByMrn(String mrn, Pageable pageable) {
+    public Optional<MaritimeResourceEntity> getByMrnAndVersion(String mrn, Long version) {
+        return repository.getByMrnAndVersion(mrn, version);
+    }
+
+    public Page<MaritimeResourceEntity> getAllByMrn(String mrn, Pageable pageable) {
         return repository.getAllByMrn(mrn, pageable);
     }
 }

@@ -26,6 +26,7 @@ import java.util.Optional;
 public interface MaritimeResourceRepository extends PagingAndSortingRepository<MaritimeResourceEntity, Long> {
 
     Page<MaritimeResourceEntity> getAllByMrn(String mrn, Pageable pageable);
+    Optional<MaritimeResourceEntity> getByMrnAndVersion(String mrn, Long version);
     @Override
     Optional<MaritimeResourceEntity> findById(Long id);
 }

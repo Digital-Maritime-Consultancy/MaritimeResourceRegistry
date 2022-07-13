@@ -80,7 +80,7 @@ public class MaritimeResourceController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public Page<MaritimeResourceDTO> getResourcesForMrn(@PathVariable String mrn, @ParameterObject Pageable pageable, HttpServletRequest request) throws MrrRestException {
-        Page<MaritimeResourceEntity> resourceEntities = resourceService.getByMrn(mrn, pageable);
+        Page<MaritimeResourceEntity> resourceEntities = resourceService.getAllByMrn(mrn, pageable);
 
         if (resourceEntities.isEmpty()) {
             Optional<MrrEntity> maybeMrr = mrrService.searchForEarlierMrr(mrn);
@@ -91,6 +91,25 @@ public class MaritimeResourceController {
         }
 
         return resourceEntities.map(MaritimeResourceDTO::new);
+    }
+
+    @GetMapping(
+            value = "/{mrn}/{version}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<MaritimeResourceDTO> getResourceByMrnAndVersion(@PathVariable String mrn, @PathVariable Long version, HttpServletRequest request) throws MrrRestException {
+        Optional<MaritimeResourceEntity> maybeResource = resourceService.getByMrnAndVersion(mrn, version);
+
+        if (maybeResource.isEmpty()) {
+            Optional<MrrEntity> maybeMrr = mrrService.searchForEarlierMrr(mrn);
+            if (maybeMrr.isPresent())
+                throw new MrrRestException(HttpStatus.SEE_OTHER,
+                        "Please repeat your query in the MRR for the namespace " + maybeMrr.get().getMrnNamespace(),
+                        request.getServletPath(), maybeMrr.get().getEndpoint() + request.getServletPath());
+            throw new MrrRestException(HttpStatus.NOT_FOUND, "The requested resource could not be found",
+                    request.getServletPath());
+        }
+        return new ResponseEntity<>(new MaritimeResourceDTO(maybeResource.get()), HttpStatus.OK);
     }
 
     @GetMapping(
@@ -122,7 +141,7 @@ public class MaritimeResourceController {
     }
 
     private MaritimeResourceEntity handleCreation(MaritimeResourceDTO maritimeResourceDTO, HttpServletRequest request) throws URISyntaxException, MrrRestException {
-        MaritimeResourceEntity entity = new MaritimeResourceEntity(maritimeResourceDTO.getMrn(),
+        MaritimeResourceEntity entity = new MaritimeResourceEntity(maritimeResourceDTO.getMrn(), maritimeResourceDTO.getVersion(),
                 maritimeResourceDTO.getLocation(), maritimeResourceDTO.getTitle(), maritimeResourceDTO.getDescription());
 
         Optional<MrrEntity> maybeMrr = mrrService.searchForEarlierMrr(maritimeResourceDTO.getMrn());
@@ -130,6 +149,12 @@ public class MaritimeResourceController {
             throw new MrrRestException(HttpStatus.BAD_REQUEST,
                     String.format("An MRR for the namespace %s exists. Please register your resource there",
                             maybeMrr.get().getMrnNamespace()), request.getServletPath());
+        }
+
+        Optional<MaritimeResourceEntity> maybeResource = resourceService.getByMrnAndVersion(entity.getMrn(), entity.getVersion());
+        if (maybeResource.isPresent()) {
+            throw new MrrRestException(HttpStatus.CONFLICT, "A resource with the given combination of MRN and version already exists",
+                    request.getServletPath());
         }
 
         NamespaceSyntax syntax = namespaceSyntaxService.findNamespaceSyntaxForMrn(entity.getMrn());
