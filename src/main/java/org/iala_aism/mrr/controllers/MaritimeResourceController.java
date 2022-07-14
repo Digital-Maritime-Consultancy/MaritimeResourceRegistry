@@ -177,8 +177,10 @@ public class MaritimeResourceController {
         Optional<MaritimeResourceEntity> maybeResource = resourceService.getById(resourceId);
         if (maybeResource.isEmpty())
             throw new MrrRestException(HttpStatus.NOT_FOUND, COULD_NOT_BE_FOUND, request.getServletPath());
-        if (!accessControlUtil.canManageNamespace(maybeResource.get().getMrn()))
+        if (!accessControlUtil.canManageNamespace(maybeResource.get().getMrn())) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
         resourceService.deleteById(resourceId);
     }
 

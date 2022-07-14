@@ -46,6 +46,11 @@ public class MrrService {
     }
 
     @Transactional
+    public void deleteByMrnNamespace(String mrnNamespace) {
+        repository.deleteByMrnNamespace(mrnNamespace);
+    }
+
+    @Transactional
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
