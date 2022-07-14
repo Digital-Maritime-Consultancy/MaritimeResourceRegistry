@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package org.iala_aism.mrr.model;
+package org.iala_aism.mrr.model.dto;
 
 import lombok.Getter;
+import org.iala_aism.mrr.model.JsonSerializable;
+import org.iala_aism.mrr.model.NamespaceSyntax;
 
 @Getter
 public class NamespaceSyntaxDTO implements JsonSerializable {

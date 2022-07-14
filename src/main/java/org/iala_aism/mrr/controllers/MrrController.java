@@ -17,7 +17,7 @@
 package org.iala_aism.mrr.controllers;
 
 import org.iala_aism.mrr.exceptions.MrrRestException;
-import org.iala_aism.mrr.model.MrrDTO;
+import org.iala_aism.mrr.model.dto.MrrDTO;
 import org.iala_aism.mrr.model.MrrEntity;
 import org.iala_aism.mrr.model.NamespaceEntity;
 import org.iala_aism.mrr.services.MrrService;

@@ -17,7 +17,7 @@
 package org.iala_aism.mrr.controllers;
 
 import org.iala_aism.mrr.exceptions.MrrRestException;
-import org.iala_aism.mrr.model.MaritimeResourceDTO;
+import org.iala_aism.mrr.model.dto.MaritimeResourceDTO;
 import org.iala_aism.mrr.model.MaritimeResourceEntity;
 import org.iala_aism.mrr.model.MrrEntity;
 import org.iala_aism.mrr.model.NamespaceSyntax;

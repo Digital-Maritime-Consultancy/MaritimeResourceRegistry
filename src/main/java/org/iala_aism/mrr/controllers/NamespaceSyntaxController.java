@@ -19,7 +19,7 @@ package org.iala_aism.mrr.controllers;
 import org.iala_aism.mrr.exceptions.MrrRestException;
 import org.iala_aism.mrr.model.MrrEntity;
 import org.iala_aism.mrr.model.NamespaceSyntax;
-import org.iala_aism.mrr.model.NamespaceSyntaxDTO;
+import org.iala_aism.mrr.model.dto.NamespaceSyntaxDTO;
 import org.iala_aism.mrr.services.MrrService;
 import org.iala_aism.mrr.services.NamespaceSyntaxService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package org.iala_aism.mrr.model;
+package org.iala_aism.mrr.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.iala_aism.mrr.model.JsonSerializable;
+import org.iala_aism.mrr.model.MaritimeResourceEntity;
 
 @Getter
 @Setter
