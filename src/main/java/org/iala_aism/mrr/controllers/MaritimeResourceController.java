@@ -82,7 +82,7 @@ public class MaritimeResourceController {
             value = "/{mrn}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public Page<MaritimeResourceDTO> getResourcesForMrn(@PathVariable String mrn, @ParameterObject Pageable pageable, HttpServletRequest request) throws MrrRestException {
+    public Page<MaritimeResourceDTO> getAllResourcesForMrn(@PathVariable String mrn, @ParameterObject Pageable pageable, HttpServletRequest request) throws MrrRestException {
         Page<MaritimeResourceEntity> resourceEntities = resourceService.getAllByMrn(mrn, pageable);
 
         if (resourceEntities.isEmpty()) {
