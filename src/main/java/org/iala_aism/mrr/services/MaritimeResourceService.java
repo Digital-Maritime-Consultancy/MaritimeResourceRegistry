@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -57,6 +58,11 @@ public class MaritimeResourceService {
 
     public Optional<MaritimeResourceEntity> getByMrnAndVersion(String mrn, Long version) {
         return repository.getByMrnAndVersion(mrn, version);
+    }
+
+    public Optional<MaritimeResourceEntity> getLatestByMrn(String mrn) {
+        List<MaritimeResourceEntity> resourceEntities = repository.getByMrnOrderByVersionDesc(mrn);
+        return Optional.of(resourceEntities.get(0));
     }
 
     public Page<MaritimeResourceEntity> getAllByMrn(String mrn, Pageable pageable) {
