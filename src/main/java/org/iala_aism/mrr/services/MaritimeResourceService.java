@@ -62,7 +62,9 @@ public class MaritimeResourceService {
 
     public Optional<MaritimeResourceEntity> getLatestByMrn(String mrn) {
         List<MaritimeResourceEntity> resourceEntities = repository.getByMrnOrderByVersionDesc(mrn);
-        return Optional.of(resourceEntities.get(0));
+        if (!resourceEntities.isEmpty())
+            return Optional.of(resourceEntities.get(0));
+        return Optional.empty();
     }
 
     public Page<MaritimeResourceEntity> getAllByMrn(String mrn, Pageable pageable) {
