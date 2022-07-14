@@ -25,6 +25,7 @@ import org.iala_aism.mrr.services.MaritimeResourceService;
 import org.iala_aism.mrr.services.MrrService;
 import org.iala_aism.mrr.services.NamespaceService;
 import org.iala_aism.mrr.services.NamespaceSyntaxService;
+import org.iala_aism.mrr.utils.AccessControlUtil;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,6 +45,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
@@ -53,10 +56,12 @@ import java.util.regex.Pattern;
 @RequestMapping("/resource")
 public class MaritimeResourceController {
 
+    public static final String COULD_NOT_BE_FOUND = "The requested resource could not be found";
     private MaritimeResourceService resourceService;
     private NamespaceService namespaceService;
     private NamespaceSyntaxService namespaceSyntaxService;
     private MrrService mrrService;
+    private AccessControlUtil accessControlUtil;
 
     @Autowired
     public void setResourceService(MaritimeResourceService resourceService) {
@@ -76,6 +81,11 @@ public class MaritimeResourceController {
     @Autowired
     public void setMrrService(MrrService mrrService) {
         this.mrrService = mrrService;
+    }
+
+    @Autowired
+    public void setAccessControlUtil(AccessControlUtil accessControlUtil) {
+        this.accessControlUtil = accessControlUtil;
     }
 
     @GetMapping(
@@ -127,7 +137,7 @@ public class MaritimeResourceController {
     public ResponseEntity<MaritimeResourceDTO> getResourceById(@PathVariable Long resourceId, HttpServletRequest request) throws MrrRestException {
         Optional<MaritimeResourceEntity> resourceEntityOptional = resourceService.getById(resourceId);
         MaritimeResourceEntity resourceEntity = resourceEntityOptional.orElseThrow(
-                () -> new MrrRestException(HttpStatus.NOT_FOUND, "The requested resource could not be found",
+                () -> new MrrRestException(HttpStatus.NOT_FOUND, COULD_NOT_BE_FOUND,
                         request.getServletPath())
         );
         return new ResponseEntity<>(new MaritimeResourceDTO(resourceEntity), HttpStatus.OK);
@@ -149,12 +159,35 @@ public class MaritimeResourceController {
         }
     }
 
+    @DeleteMapping(
+            value = "/{mrn}/{version}"
+    )
+    @PreAuthorize("@accessControlUtil.canManageNamespace(#mrn)")
+    public void deleteResourceByMrnAndVersion(@PathVariable String mrn, @PathVariable Long version, HttpServletRequest request) throws MrrRestException {
+        Optional<MaritimeResourceEntity> maybeResource = resourceService.getByMrnAndVersion(mrn, version);
+        if (maybeResource.isEmpty())
+            throw new MrrRestException(HttpStatus.NOT_FOUND, COULD_NOT_BE_FOUND, request.getServletPath());
+        resourceService.deleteByMrnAndVersion(mrn, version);
+    }
+
+    @DeleteMapping(
+            value = "/id/{resourceId}"
+    )
+    public void deleteResourceById(@PathVariable Long resourceId, HttpServletRequest request, HttpServletResponse response) throws MrrRestException {
+        Optional<MaritimeResourceEntity> maybeResource = resourceService.getById(resourceId);
+        if (maybeResource.isEmpty())
+            throw new MrrRestException(HttpStatus.NOT_FOUND, COULD_NOT_BE_FOUND, request.getServletPath());
+        if (!accessControlUtil.canManageNamespace(maybeResource.get().getMrn()))
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        resourceService.deleteById(resourceId);
+    }
+
     private MrrRestException handleOptionalResource(@PathVariable String mrn, HttpServletRequest request) {
         Optional<MrrEntity> maybeMrr = mrrService.searchForEarlierMrr(mrn);
         return maybeMrr.map(mrrEntity -> new MrrRestException(HttpStatus.SEE_OTHER,
                 "Please repeat your query in the MRR for the namespace " + mrrEntity.getMrnNamespace(),
                 request.getServletPath(), mrrEntity.getEndpoint() + request.getServletPath()))
-                .orElseGet(() -> new MrrRestException(HttpStatus.NOT_FOUND, "The requested resource could not be found",
+                .orElseGet(() -> new MrrRestException(HttpStatus.NOT_FOUND, COULD_NOT_BE_FOUND,
                 request.getServletPath()));
     }
 

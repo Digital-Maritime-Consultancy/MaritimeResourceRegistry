@@ -31,4 +31,5 @@ public interface MaritimeResourceRepository extends PagingAndSortingRepository<M
     List<MaritimeResourceEntity> getByMrnOrderByVersionDesc(String mrn);
     @Override
     Optional<MaritimeResourceEntity> findById(Long id);
+    void deleteByMrnAndVersion(String mrn, Long version);
 }

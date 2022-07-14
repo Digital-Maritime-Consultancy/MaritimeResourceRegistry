@@ -48,6 +48,11 @@ public class MaritimeResourceService {
     }
 
     @Transactional
+    public void deleteByMrnAndVersion(String mrn, Long version) {
+        repository.deleteByMrnAndVersion(mrn, version);
+    }
+
+    @Transactional
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
