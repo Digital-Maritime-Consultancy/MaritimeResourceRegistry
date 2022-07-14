@@ -33,6 +33,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,6 +48,7 @@ import java.net.URISyntaxException;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+@EnableMethodSecurity
 @RestController
 @RequestMapping("/resource")
 public class MaritimeResourceController {
@@ -134,6 +137,7 @@ public class MaritimeResourceController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @PreAuthorize("@accessControlUtil.canManageNamespace(#maritimeResourceDTO.mrn)")
     public ResponseEntity<MaritimeResourceDTO> createResource(@RequestBody MaritimeResourceDTO maritimeResourceDTO, HttpServletRequest request) throws MrrRestException {
         try {
             MaritimeResourceEntity newResource = handleCreation(maritimeResourceDTO, request);
@@ -149,7 +153,8 @@ public class MaritimeResourceController {
         Optional<MrrEntity> maybeMrr = mrrService.searchForEarlierMrr(mrn);
         return maybeMrr.map(mrrEntity -> new MrrRestException(HttpStatus.SEE_OTHER,
                 "Please repeat your query in the MRR for the namespace " + mrrEntity.getMrnNamespace(),
-                request.getServletPath(), mrrEntity.getEndpoint() + request.getServletPath())).orElseGet(() -> new MrrRestException(HttpStatus.NOT_FOUND, "The requested resource could not be found",
+                request.getServletPath(), mrrEntity.getEndpoint() + request.getServletPath()))
+                .orElseGet(() -> new MrrRestException(HttpStatus.NOT_FOUND, "The requested resource could not be found",
                 request.getServletPath()));
     }
 

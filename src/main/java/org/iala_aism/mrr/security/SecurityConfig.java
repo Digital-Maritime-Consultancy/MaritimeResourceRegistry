@@ -31,6 +31,7 @@ public class SecurityConfig {
         http
                 .authorizeRequests(authz -> authz
                         .mvcMatchers(HttpMethod.POST, "/**").authenticated()
+                        .mvcMatchers(HttpMethod.GET, "/**").permitAll()
                 )
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
         return http.build();
