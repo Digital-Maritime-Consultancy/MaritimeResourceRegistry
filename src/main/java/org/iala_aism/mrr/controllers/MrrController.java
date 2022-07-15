@@ -16,6 +16,7 @@
 
 package org.iala_aism.mrr.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.iala_aism.mrr.exceptions.MrrRestException;
 import org.iala_aism.mrr.model.dto.MrrDTO;
 import org.iala_aism.mrr.model.MrrEntity;
@@ -69,6 +70,9 @@ public class MrrController {
             value = "/{mrnNamespace}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @Operation(
+            description = "Returns the MRR for the given MRN namespace"
+    )
     public ResponseEntity<MrrDTO> getMrr(@PathVariable String mrnNamespace, HttpServletRequest request) throws MrrRestException {
         MrrEntity mrr = mrrService.getByMrnNamespace(mrnNamespace)
                 .orElseThrow(() -> new MrrRestException(HttpStatus.NOT_FOUND,
@@ -80,6 +84,9 @@ public class MrrController {
     @GetMapping(
             value = "/id/{mrrId}",
             produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(
+            description = "Returns the MRR with given ID"
     )
     public ResponseEntity<MrrDTO> getMrrById(@PathVariable Long mrrId, HttpServletRequest request) throws MrrRestException {
         MrrEntity mrr = mrrService.getById(mrrId)
@@ -93,6 +100,9 @@ public class MrrController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @Operation(
+            description = "Creates a new MRR"
+    )
     @PreAuthorize("@accessControlUtil.canManageNamespace(#mrr.mrnNamespace)")
     public ResponseEntity<MrrDTO> createMrr(@RequestBody MrrDTO mrr, HttpServletRequest request) throws MrrRestException {
         MrrEntity mrrEntity = handleCreation(mrr, request);
@@ -102,6 +112,9 @@ public class MrrController {
 
     @DeleteMapping(
             value = "/{mrnNamespace}"
+    )
+    @Operation(
+            description = "Deletes the MRR for the given MRN namespace"
     )
     @PreAuthorize("@accessControlUtil.canManageNamespace(#mrnNamespace)")
     public void deleteByMrnNamespace(@PathVariable String mrnNamespace, HttpServletRequest request) throws MrrRestException {
@@ -113,6 +126,9 @@ public class MrrController {
 
     @DeleteMapping(
             value = "/id/{mrrId}"
+    )
+    @Operation(
+            description = "Deletes the MRR with the given ID"
     )
     public void deleteById(@PathVariable Long mrrId, HttpServletRequest request, HttpServletResponse response) throws MrrRestException {
         Optional<MrrEntity> maybeMrr = mrrService.getById(mrrId);

@@ -16,6 +16,7 @@
 
 package org.iala_aism.mrr.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.iala_aism.mrr.exceptions.MrrRestException;
 import org.iala_aism.mrr.model.MrrEntity;
 import org.iala_aism.mrr.model.NamespaceSyntax;
@@ -54,6 +55,9 @@ public class NamespaceSyntaxController {
     @GetMapping(
             path = "/{mrn}",
             produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(
+            description = "Returns the syntax definition that applies to the given MRN"
     )
     public ResponseEntity<NamespaceSyntaxDTO> getNamespaceSyntaxForMrn(@PathVariable String mrn, HttpServletRequest request) throws MrrRestException {
         // Start by checking if there is a syntax for the specific MRN

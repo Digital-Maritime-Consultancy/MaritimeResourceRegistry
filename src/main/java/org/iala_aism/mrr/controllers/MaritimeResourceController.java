@@ -16,6 +16,7 @@
 
 package org.iala_aism.mrr.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.iala_aism.mrr.exceptions.MrrRestException;
 import org.iala_aism.mrr.model.dto.MaritimeResourceDTO;
 import org.iala_aism.mrr.model.MaritimeResourceEntity;
@@ -92,6 +93,9 @@ public class MaritimeResourceController {
             value = "/{mrn}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @Operation(
+            description = "Returns a page of all versions of the resource with the given MRN"
+    )
     public Page<MaritimeResourceDTO> getAllResourcesForMrn(@PathVariable String mrn, @ParameterObject Pageable pageable, HttpServletRequest request) throws MrrRestException {
         Page<MaritimeResourceEntity> resourceEntities = resourceService.getAllByMrn(mrn, pageable);
 
@@ -110,6 +114,9 @@ public class MaritimeResourceController {
             value = "/{mrn}/{version}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @Operation(
+            description = "Returns the resource with the given MRN and version"
+    )
     public ResponseEntity<MaritimeResourceDTO> getResourceByMrnAndVersion(@PathVariable String mrn, @PathVariable Long version, HttpServletRequest request) throws MrrRestException {
         Optional<MaritimeResourceEntity> maybeResource = resourceService.getByMrnAndVersion(mrn, version);
 
@@ -121,6 +128,9 @@ public class MaritimeResourceController {
     @GetMapping(
             value = "/{mrn}/latest",
             produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(
+            description = "Returns the latest version of the resource with the given MRN"
     )
     public ResponseEntity<MaritimeResourceDTO> getLatestVersionOfResourceByMrn(@PathVariable String mrn, HttpServletRequest request) throws MrrRestException {
         Optional<MaritimeResourceEntity> maybeResource = resourceService.getLatestByMrn(mrn);
@@ -134,6 +144,9 @@ public class MaritimeResourceController {
             value = "/id/{resourceId}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @Operation(
+            description = "Returns the resource with the given ID"
+    )
     public ResponseEntity<MaritimeResourceDTO> getResourceById(@PathVariable Long resourceId, HttpServletRequest request) throws MrrRestException {
         Optional<MaritimeResourceEntity> resourceEntityOptional = resourceService.getById(resourceId);
         MaritimeResourceEntity resourceEntity = resourceEntityOptional.orElseThrow(
@@ -146,6 +159,9 @@ public class MaritimeResourceController {
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(
+            description = "Creates a new resource"
     )
     @PreAuthorize("@accessControlUtil.canManageNamespace(#maritimeResourceDTO.mrn)")
     public ResponseEntity<MaritimeResourceDTO> createResource(@RequestBody MaritimeResourceDTO maritimeResourceDTO, HttpServletRequest request) throws MrrRestException {
@@ -162,6 +178,9 @@ public class MaritimeResourceController {
     @DeleteMapping(
             value = "/{mrn}/{version}"
     )
+    @Operation(
+            description = "Deletes the resource with the given MRN and version"
+    )
     @PreAuthorize("@accessControlUtil.canManageNamespace(#mrn)")
     public void deleteResourceByMrnAndVersion(@PathVariable String mrn, @PathVariable Long version, HttpServletRequest request) throws MrrRestException {
         Optional<MaritimeResourceEntity> maybeResource = resourceService.getByMrnAndVersion(mrn, version);
@@ -172,6 +191,9 @@ public class MaritimeResourceController {
 
     @DeleteMapping(
             value = "/id/{resourceId}"
+    )
+    @Operation(
+            description = "Deletes the resource with the given ID"
     )
     public void deleteResourceById(@PathVariable Long resourceId, HttpServletRequest request, HttpServletResponse response) throws MrrRestException {
         Optional<MaritimeResourceEntity> maybeResource = resourceService.getById(resourceId);
