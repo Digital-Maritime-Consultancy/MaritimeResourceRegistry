@@ -34,12 +34,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.Optional;
 
 @EnableMethodSecurity
@@ -108,6 +110,43 @@ public class MrrController {
         MrrEntity mrrEntity = handleCreation(mrr, request);
         MrrDTO mrrDTO = new MrrDTO(mrrEntity);
         return new ResponseEntity<>(mrrDTO, HttpStatus.OK);
+    }
+
+    @PutMapping(
+            value = "/{mrnNamespace}",
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(
+            description = "Updates the MRR with the given MRN namespace"
+    )
+    @PreAuthorize("@accessControlUtil.canManageNamespace(#mrnNamespace)")
+    public void updateMrrByMrnNamespace(@PathVariable String mrnNamespace, @Valid @RequestBody MrrDTO mrrDTO, HttpServletRequest request) throws MrrRestException {
+        Optional<MrrEntity> maybeMrr = mrrService.getByMrnNamespace(mrnNamespace);
+        MrrEntity mrr = maybeMrr.orElseThrow(() -> new MrrRestException(HttpStatus.NOT_FOUND, NAMESPACE_COULD_NOT_BE_FOUND, request.getServletPath()));
+        // TODO right now it only makes sense to update the endpoint, but in the future it might make sense
+        // to also update other attributes
+        mrr.setEndpoint(mrrDTO.getEndpoint());
+        mrrService.save(mrr);
+    }
+
+    @PutMapping(
+            value = "/id/{mrrId}",
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(
+            description = "Updates the MRR with the given ID"
+    )
+    public void updateMrrById(@PathVariable Long mrrId, @Valid @RequestBody MrrDTO mrrDTO, HttpServletRequest request, HttpServletResponse response) throws MrrRestException {
+        Optional<MrrEntity> maybeMrr = mrrService.getById(mrrId);
+        if (maybeMrr.isEmpty())
+            throw new MrrRestException(HttpStatus.NOT_FOUND, NAMESPACE_COULD_NOT_BE_FOUND, request.getServletPath());
+        MrrEntity mrr = maybeMrr.get();
+        if (!accessControlUtil.canManageNamespace(mrr.getMrnNamespace())) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
+        mrr.setEndpoint(mrrDTO.getEndpoint());
+        mrrService.save(mrr);
     }
 
     @DeleteMapping(
