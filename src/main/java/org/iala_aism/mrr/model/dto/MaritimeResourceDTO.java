@@ -16,23 +16,35 @@
 
 package org.iala_aism.mrr.model.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 import org.iala_aism.mrr.model.JsonSerializable;
 import org.iala_aism.mrr.model.MaritimeResourceEntity;
+
+import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "Object representing a reference to a maritime resource")
 public class MaritimeResourceDTO implements JsonSerializable {
+    @Schema(description = "The MRN of the resource")
     private String mrn;
+    @Schema(description = "The version of the resource")
     private long version;
+    @URL
+    @Schema(description = "The location of the resource in the form of a URL")
     private String location;
+    @Schema(description = "The title of the resource")
     private String title;
+    @Schema(description = "A description of the resource")
     private String description;
+    @Schema(description = "The unique ID of the resource in the MRR", accessMode = READ_ONLY)
     private long id;
 
     public MaritimeResourceDTO(MaritimeResourceEntity maritimeResourceEntity) {

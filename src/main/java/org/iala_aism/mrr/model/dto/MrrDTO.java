@@ -16,20 +16,29 @@
 
 package org.iala_aism.mrr.model.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 import org.iala_aism.mrr.model.JsonSerializable;
 import org.iala_aism.mrr.model.MrrEntity;
+
+import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "Object representing a reference to another MRR")
 public class MrrDTO implements JsonSerializable {
+    @Schema(description = "The unique ID of the MRR", accessMode = READ_ONLY)
     private Long id;
+    @Schema(description = "The MRN namespace of the MRR")
     private String mrnNamespace;
+    @URL(protocol = "https")
+    @Schema(description = "The endpoint of the MRR")
     private String endpoint;
 
     public MrrDTO(MrrEntity mrrEntity) {

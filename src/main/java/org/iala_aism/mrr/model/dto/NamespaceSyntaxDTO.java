@@ -16,15 +16,23 @@
 
 package org.iala_aism.mrr.model.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import org.iala_aism.mrr.model.JsonSerializable;
 import org.iala_aism.mrr.model.NamespaceSyntax;
 
+import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
+
 @Getter
+@Schema(description = "Object representing the syntax definition for a MRN namespace")
 public class NamespaceSyntaxDTO implements JsonSerializable {
+    @Schema(description = "The MRN namespace that this syntax describes", accessMode = READ_ONLY)
     private final String namespace;
+    @Schema(description = "The ABNF syntax", accessMode = READ_ONLY)
     private final String abnfSyntax;
+    @Schema(description = "A regular expression derived from the ABNF syntax", accessMode = READ_ONLY)
     private final String regex;
+    @Schema(description = "The unique ID of the namespace syntax", accessMode = READ_ONLY)
     private final long id;
 
     public NamespaceSyntaxDTO(NamespaceSyntax namespaceSyntax) {
