@@ -29,17 +29,20 @@ import java.util.List;
 public class AccessControlUtil {
 
     public boolean canManageNamespace(String mrn) {
-        log.debug("Checking if user can manage namespace {}", mrn);
+        log.debug("Checking if user is allowed to manage namespace {}", mrn);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated() && auth instanceof JwtAuthenticationToken jwtAuthenticationToken) {
             List<String> managesNamespaces = jwtAuthenticationToken.getToken().getClaimAsStringList("manages_namespaces");
             if (managesNamespaces != null && !managesNamespaces.isEmpty()) {
                 for (String namespace : managesNamespaces) {
-                    if (!namespace.isBlank() && mrn.startsWith(namespace))
+                    if (!namespace.isBlank() && mrn.startsWith(namespace)) {
+                        log.debug("User is allowed to manage namespace {}", mrn);
                         return true;
+                    }
                 }
             }
         }
+        log.debug("User is not allowed to mange namespace {}", mrn);
         return false;
     }
 }
