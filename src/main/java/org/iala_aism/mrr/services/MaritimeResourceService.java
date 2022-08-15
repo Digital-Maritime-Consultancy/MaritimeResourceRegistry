@@ -75,4 +75,8 @@ public class MaritimeResourceService {
     public Page<MaritimeResourceEntity> getAllByMrn(String mrn, Pageable pageable) {
         return repository.getAllByMrn(mrn, pageable);
     }
+
+    public List<MaritimeResourceEntity> getAll() {
+        return (List<MaritimeResourceEntity>) repository.findAll();
+    }
 }

@@ -49,6 +49,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -108,6 +109,18 @@ public class MaritimeResourceController {
         }
 
         return resourceEntities.map(MaritimeResourceDTO::new);
+    }
+
+    @GetMapping(
+            value = "/all",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(
+            description = "Returns the list containing all registered resources. Is only here for testing purposes and will be removed in the future."
+    )
+    public ResponseEntity<List<MaritimeResourceDTO>> getAllMaritimeResources() {
+        List<MaritimeResourceEntity> allResources = resourceService.getAll();
+        return new ResponseEntity<>(allResources.stream().map(MaritimeResourceDTO::new).toList(), HttpStatus.OK);
     }
 
     @GetMapping(
