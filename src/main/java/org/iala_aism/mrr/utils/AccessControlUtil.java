@@ -42,7 +42,7 @@ public class AccessControlUtil {
                 }
             }
         }
-        log.debug("User is not allowed to mange namespace {}", mrn);
+        log.debug("User is not allowed to manage namespace {}", mrn);
         return false;
     }
 }
