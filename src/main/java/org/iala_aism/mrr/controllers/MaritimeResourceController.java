@@ -117,7 +117,7 @@ public class MaritimeResourceController {
     @Operation(
             description = "Returns the resource with the given MRN and version"
     )
-    public ResponseEntity<MaritimeResourceDTO> getResourceByMrnAndVersion(@PathVariable String mrn, @PathVariable Long version, HttpServletRequest request) throws MrrRestException {
+    public ResponseEntity<MaritimeResourceDTO> getResourceByMrnAndVersion(@PathVariable String mrn, @PathVariable String version, HttpServletRequest request) throws MrrRestException {
         Optional<MaritimeResourceEntity> maybeResource = resourceService.getByMrnAndVersion(mrn, version);
 
         if (maybeResource.isEmpty())
@@ -182,7 +182,7 @@ public class MaritimeResourceController {
             description = "Deletes the resource with the given MRN and version"
     )
     @PreAuthorize("@accessControlUtil.canManageNamespace(#mrn)")
-    public void deleteResourceByMrnAndVersion(@PathVariable String mrn, @PathVariable Long version, HttpServletRequest request) throws MrrRestException {
+    public void deleteResourceByMrnAndVersion(@PathVariable String mrn, @PathVariable String version, HttpServletRequest request) throws MrrRestException {
         Optional<MaritimeResourceEntity> maybeResource = resourceService.getByMrnAndVersion(mrn, version);
         if (maybeResource.isEmpty())
             throw new MrrRestException(HttpStatus.NOT_FOUND, COULD_NOT_BE_FOUND, request.getServletPath());

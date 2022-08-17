@@ -48,7 +48,7 @@ public class MaritimeResourceService {
     }
 
     @Transactional
-    public void deleteByMrnAndVersion(String mrn, Long version) {
+    public void deleteByMrnAndVersion(String mrn, String version) {
         repository.deleteByMrnAndVersion(mrn, version);
     }
 
@@ -61,7 +61,7 @@ public class MaritimeResourceService {
         return repository.findById(id);
     }
 
-    public Optional<MaritimeResourceEntity> getByMrnAndVersion(String mrn, Long version) {
+    public Optional<MaritimeResourceEntity> getByMrnAndVersion(String mrn, String version) {
         return repository.getByMrnAndVersion(mrn, version);
     }
 

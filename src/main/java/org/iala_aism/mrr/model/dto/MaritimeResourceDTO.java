@@ -36,7 +36,7 @@ public class MaritimeResourceDTO implements JsonSerializable {
     @Schema(description = "The MRN of the resource")
     private String mrn;
     @Schema(description = "The version of the resource")
-    private long version;
+    private String version;
     @URL
     @Schema(description = "The location of the resource in the form of a URL")
     private String location;
