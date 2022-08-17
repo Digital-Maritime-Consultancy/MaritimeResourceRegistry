@@ -66,7 +66,25 @@ public class MaritimeResourceService {
     }
 
     public Optional<MaritimeResourceEntity> getLatestByMrn(String mrn) {
-        List<MaritimeResourceEntity> resourceEntities = repository.getByMrnOrderByVersionDesc(mrn);
+        List<MaritimeResourceEntity> resourceEntities = repository.getByMrn(mrn);
+
+        // Sort based on versions with '.' seperated parts
+        resourceEntities.sort((mr1, mr2) -> {
+            String[] mr1VersionSplit = mr1.getVersion().split("\\.");
+            String[] mr2VersionSplit = mr2.getVersion().split("\\.");
+
+            for (int i = 0; i < mr1VersionSplit.length; i++) {
+                int v1 = Integer.parseInt(mr1VersionSplit[i]);
+                int v2 = Integer.parseInt(mr2VersionSplit[i]);
+
+                if (v1 < v2)
+                    return -1;
+                else if(v1 > v2)
+                    return 1;
+            }
+            return 0;
+        });
+
         if (!resourceEntities.isEmpty())
             return Optional.of(resourceEntities.get(0));
         return Optional.empty();

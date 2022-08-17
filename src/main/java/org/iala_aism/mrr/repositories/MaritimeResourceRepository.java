@@ -28,7 +28,7 @@ public interface MaritimeResourceRepository extends PagingAndSortingRepository<M
 
     Page<MaritimeResourceEntity> getAllByMrn(String mrn, Pageable pageable);
     Optional<MaritimeResourceEntity> getByMrnAndVersion(String mrn, String version);
-    List<MaritimeResourceEntity> getByMrnOrderByVersionDesc(String mrn);
+    List<MaritimeResourceEntity> getByMrn(String mrn);
     @Override
     Optional<MaritimeResourceEntity> findById(Long id);
     void deleteByMrnAndVersion(String mrn, String version);
