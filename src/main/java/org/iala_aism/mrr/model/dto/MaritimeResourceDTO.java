@@ -35,7 +35,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 public class MaritimeResourceDTO implements JsonSerializable {
     @Schema(description = "The MRN of the resource")
     private String mrn;
-    @Schema(description = "The version of the resource")
+    @Schema(description = "The version of the resource in the format X.Y.Z and more formally given by the following regex: ^(0|[1-9]\\d\\*).(0|[1-9]\\d\\*).(0|[1-9]\\d\\*)$")
     private String version;
     @URL
     @Schema(description = "The location of the resource in the form of a URL")
