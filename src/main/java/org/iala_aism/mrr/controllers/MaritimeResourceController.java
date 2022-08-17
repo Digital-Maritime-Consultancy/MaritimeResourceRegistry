@@ -59,6 +59,7 @@ import java.util.regex.Pattern;
 public class MaritimeResourceController {
 
     public static final String COULD_NOT_BE_FOUND = "The requested resource could not be found";
+    private final Pattern versionPattern = Pattern.compile("^(0|[1-9]\\d*).(0|[1-9]\\d*).(0|[1-9]\\d*)$"); // Regex for X.Y.Z version format
     private MaritimeResourceService resourceService;
     private NamespaceService namespaceService;
     private NamespaceSyntaxService namespaceSyntaxService;
@@ -222,10 +223,10 @@ public class MaritimeResourceController {
     private MrrRestException handleOptionalResource(@PathVariable String mrn, HttpServletRequest request) {
         Optional<MrrEntity> maybeMrr = mrrService.searchForEarlierMrr(mrn);
         return maybeMrr.map(mrrEntity -> new MrrRestException(HttpStatus.SEE_OTHER,
-                "Please repeat your query in the MRR for the namespace " + mrrEntity.getMrnNamespace(),
-                request.getServletPath(), mrrEntity.getEndpoint() + request.getServletPath()))
+                        "Please repeat your query in the MRR for the namespace " + mrrEntity.getMrnNamespace(),
+                        request.getServletPath(), mrrEntity.getEndpoint() + request.getServletPath()))
                 .orElseGet(() -> new MrrRestException(HttpStatus.NOT_FOUND, COULD_NOT_BE_FOUND,
-                request.getServletPath()));
+                        request.getServletPath()));
     }
 
     private MaritimeResourceEntity handleCreation(MaritimeResourceDTO maritimeResourceDTO, HttpServletRequest request) throws URISyntaxException, MrrRestException {
@@ -244,6 +245,9 @@ public class MaritimeResourceController {
             throw new MrrRestException(HttpStatus.CONFLICT, "A resource with the given combination of MRN and version already exists",
                     request.getServletPath());
         }
+
+        if (!versionPattern.matcher(maritimeResourceDTO.getVersion()).matches())
+            throw new MrrRestException(HttpStatus.BAD_REQUEST, "The version of the resource does not match the format X.Y.Z", request.getServletPath());
 
         NamespaceSyntax syntax = namespaceSyntaxService.findNamespaceSyntaxForMrn(entity.getMrn());
         if (syntax == null) {
