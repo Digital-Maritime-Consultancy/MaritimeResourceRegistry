@@ -59,7 +59,7 @@ import java.util.regex.Pattern;
 public class MaritimeResourceController {
 
     public static final String COULD_NOT_BE_FOUND = "The requested resource could not be found";
-    private final Pattern versionPattern = Pattern.compile("^(0|[1-9]\\d*).(0|[1-9]\\d*).(0|[1-9]\\d*)$"); // Regex for X.Y.Z version format
+    private final Pattern versionPattern = Pattern.compile("^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"); // Regex for X.Y.Z version format
     private MaritimeResourceService resourceService;
     private NamespaceService namespaceService;
     private NamespaceSyntaxService namespaceSyntaxService;
