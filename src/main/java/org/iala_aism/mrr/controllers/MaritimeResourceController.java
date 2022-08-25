@@ -231,7 +231,7 @@ public class MaritimeResourceController {
 
     private MaritimeResourceEntity handleCreation(MaritimeResourceDTO maritimeResourceDTO, HttpServletRequest request) throws URISyntaxException, MrrRestException {
         MaritimeResourceEntity entity = new MaritimeResourceEntity(maritimeResourceDTO.getMrn(), maritimeResourceDTO.getVersion(),
-                maritimeResourceDTO.getLocation(), maritimeResourceDTO.getTitle(), maritimeResourceDTO.getDescription());
+                maritimeResourceDTO.getLocation(), maritimeResourceDTO.getName(), maritimeResourceDTO.getDescription());
 
         Optional<MrrEntity> maybeMrr = mrrService.searchForEarlierMrr(maritimeResourceDTO.getMrn());
         if (maybeMrr.isPresent()) {

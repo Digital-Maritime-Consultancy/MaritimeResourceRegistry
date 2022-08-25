@@ -40,8 +40,8 @@ public class MaritimeResourceDTO implements JsonSerializable {
     @URL
     @Schema(description = "The location of the resource in the form of a URL")
     private String location;
-    @Schema(description = "The title of the resource")
-    private String title;
+    @Schema(description = "The name of the resource")
+    private String name;
     @Schema(description = "A description of the resource")
     private String description;
     @Schema(description = "The unique ID of the resource in the MRR", accessMode = READ_ONLY)
@@ -51,7 +51,7 @@ public class MaritimeResourceDTO implements JsonSerializable {
         this.mrn = maritimeResourceEntity.getMrn();
         this.version = maritimeResourceEntity.getVersion();
         this.location = maritimeResourceEntity.getLocation();
-        this.title = maritimeResourceEntity.getTitle();
+        this.name = maritimeResourceEntity.getName();
         this.description = maritimeResourceEntity.getDescription();
         this.id = maritimeResourceEntity.getId();
     }

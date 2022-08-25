@@ -51,7 +51,7 @@ public class MaritimeResourceEntity {
     private String location;
 
     @Property
-    private String title;
+    private String name;
 
     @Property
     private String description;
@@ -59,11 +59,11 @@ public class MaritimeResourceEntity {
     @Relationship(value = "FOLLOWS")
     private NamespaceEntity namespace;
 
-    public MaritimeResourceEntity(String mrn, String version, String location, String title, String description) {
+    public MaritimeResourceEntity(String mrn, String version, String location, String name, String description) {
         this.mrn = mrn;
         this.version = version;
         this.location = location;
-        this.title = title;
+        this.name = name;
         this.description = description;
     }
 }
