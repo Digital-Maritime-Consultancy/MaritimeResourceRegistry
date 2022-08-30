@@ -34,7 +34,7 @@ public class NamespaceSyntaxDTO implements JsonSerializable {
     @Schema(description = "A regular expression derived from the ABNF syntax", accessMode = READ_ONLY)
     private final String regex;
     @Schema(description = "The contact information of the namespace owner", accessMode = READ_ONLY)
-    private final NamespaceOwner namespaceOwner;
+    private final NamespaceOwnerDTO namespaceOwner;
     @Schema(description = "The unique ID of the namespace syntax", accessMode = READ_ONLY)
     private final long id;
 
@@ -42,7 +42,7 @@ public class NamespaceSyntaxDTO implements JsonSerializable {
         this.namespace = namespaceSyntax.getNamespace().getMrnNamespace();
         this.abnfSyntax = namespaceSyntax.getAbnfSyntax();
         this.regex = namespaceSyntax.getRegex();
-        this.namespaceOwner = namespaceSyntax.getNamespaceOwner();
+        this.namespaceOwner = new NamespaceOwnerDTO(namespaceSyntax.getNamespaceOwner());
         this.id = namespaceSyntax.getId();
     }
 }

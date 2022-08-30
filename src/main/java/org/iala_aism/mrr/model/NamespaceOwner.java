@@ -16,37 +16,39 @@
 
 package org.iala_aism.mrr.model;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import org.springframework.data.neo4j.core.schema.Id;
+import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
-import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
+import java.util.Set;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "Representation of the contact information of a namespace owner")
-public class NamespaceOwner implements JsonSerializable {
+@Node("NamespaceOwner")
+public class NamespaceOwner {
+    @Id
+    @GeneratedValue
+    private Long id;
     @Property
-    @Schema(description = "The name of the namespace owner", accessMode = READ_ONLY)
     private String name;
     @Property
-    @Schema(description = "The mail for the point of contact of the namespace owner", accessMode = READ_ONLY)
     private String email;
     @Property
-    @Schema(description = "The phone number for the point of contact of the namespace owner", accessMode = READ_ONLY)
     private String phone;
     @Property
-    @Schema(description = "The URL for the website of the namespace owner", accessMode = READ_ONLY)
     private String url;
     @Property
-    @Schema(description = "The address of the namespace owner", accessMode = READ_ONLY)
     private String address;
     @Property
-    @Schema(description = "The country of the namespace owner", accessMode = READ_ONLY)
     private String country;
+    @Relationship(value = "OWNS")
+    private Set<NamespaceSyntax> ownedNamespaces;
 }

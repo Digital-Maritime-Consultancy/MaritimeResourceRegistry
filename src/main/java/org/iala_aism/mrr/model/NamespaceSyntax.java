@@ -25,6 +25,8 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
+import static org.springframework.data.neo4j.core.schema.Relationship.Direction.INCOMING;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -44,7 +46,7 @@ public class NamespaceSyntax {
     @Property
     private String regex;
 
-    @Property
+    @Relationship(value = "OWNS", direction = INCOMING)
     private NamespaceOwner namespaceOwner;
 
     @Relationship(value = "DESCRIBES")
