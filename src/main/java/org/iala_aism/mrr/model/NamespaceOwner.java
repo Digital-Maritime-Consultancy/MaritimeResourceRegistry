@@ -21,6 +21,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.neo4j.core.schema.Property;
 
 import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 
@@ -30,16 +31,22 @@ import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 @NoArgsConstructor
 @Schema(description = "Representation of the contact information of a namespace owner")
 public class NamespaceOwner implements JsonSerializable {
+    @Property
     @Schema(description = "The name of the namespace owner", accessMode = READ_ONLY)
     private String name;
+    @Property
     @Schema(description = "The mail for the point of contact of the namespace owner", accessMode = READ_ONLY)
     private String email;
+    @Property
     @Schema(description = "The phone number for the point of contact of the namespace owner", accessMode = READ_ONLY)
     private String phone;
+    @Property
     @Schema(description = "The URL for the website of the namespace owner", accessMode = READ_ONLY)
     private String url;
+    @Property
     @Schema(description = "The address of the namespace owner", accessMode = READ_ONLY)
     private String address;
+    @Property
     @Schema(description = "The country of the namespace owner", accessMode = READ_ONLY)
     private String country;
 }
