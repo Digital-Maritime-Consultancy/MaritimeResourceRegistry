@@ -41,9 +41,13 @@ public class MrrDTO implements JsonSerializable {
     @Schema(description = "The endpoint of the MRR")
     private String endpoint;
 
+    @Schema(description = "The owner of the MRR")
+    private OwnerDTO owner;
+
     public MrrDTO(MrrEntity mrrEntity) {
         this.id = mrrEntity.getId();
         this.mrnNamespace = mrrEntity.getMrnNamespace();
         this.endpoint = mrrEntity.getEndpoint();
+        this.owner = new OwnerDTO(mrrEntity.getOwner());
     }
 }

@@ -46,8 +46,8 @@ public class NamespaceSyntax {
     @Property
     private String regex;
 
-    @Relationship(value = "OWNS", direction = INCOMING)
-    private NamespaceOwner namespaceOwner;
+    @Relationship(value = "OWNS_NAMESPACE", direction = INCOMING)
+    private Owner owner;
 
     @Relationship(value = "DESCRIBES")
     private NamespaceEntity namespace;

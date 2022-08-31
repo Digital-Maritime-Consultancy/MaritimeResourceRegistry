@@ -19,7 +19,6 @@ package org.iala_aism.mrr.model.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import org.iala_aism.mrr.model.JsonSerializable;
-import org.iala_aism.mrr.model.NamespaceOwner;
 import org.iala_aism.mrr.model.NamespaceSyntax;
 
 import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
@@ -34,7 +33,7 @@ public class NamespaceSyntaxDTO implements JsonSerializable {
     @Schema(description = "A regular expression derived from the ABNF syntax", accessMode = READ_ONLY)
     private final String regex;
     @Schema(description = "The contact information of the namespace owner", accessMode = READ_ONLY)
-    private final NamespaceOwnerDTO namespaceOwner;
+    private final OwnerDTO namespaceOwner;
     @Schema(description = "The unique ID of the namespace syntax", accessMode = READ_ONLY)
     private final long id;
 
@@ -42,7 +41,7 @@ public class NamespaceSyntaxDTO implements JsonSerializable {
         this.namespace = namespaceSyntax.getNamespace().getMrnNamespace();
         this.abnfSyntax = namespaceSyntax.getAbnfSyntax();
         this.regex = namespaceSyntax.getRegex();
-        this.namespaceOwner = new NamespaceOwnerDTO(namespaceSyntax.getNamespaceOwner());
+        this.namespaceOwner = new OwnerDTO(namespaceSyntax.getOwner());
         this.id = namespaceSyntax.getId();
     }
 }

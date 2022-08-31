@@ -27,6 +27,8 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
+import static org.springframework.data.neo4j.core.schema.Relationship.Direction.INCOMING;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -48,8 +50,12 @@ public class MrrEntity {
     @Relationship(value = "CONTAINS")
     private NamespaceEntity namespace;
 
-    public MrrEntity(String mrnNamespace, String endpoint) {
+    @Relationship(value = "OWNS_MRR", direction = INCOMING)
+    private Owner owner;
+
+    public MrrEntity(String mrnNamespace, String endpoint, Owner owner) {
         this.mrnNamespace = mrnNamespace;
         this.endpoint = endpoint;
+        this.owner = owner;
     }
 }

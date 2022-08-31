@@ -22,7 +22,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.iala_aism.mrr.model.JsonSerializable;
-import org.iala_aism.mrr.model.NamespaceOwner;
+import org.iala_aism.mrr.model.Owner;
 
 import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 
@@ -30,27 +30,27 @@ import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "Representation of the contact information of a namespace owner")
-public class NamespaceOwnerDTO implements JsonSerializable {
-    @Schema(description = "The name of the namespace owner", accessMode = READ_ONLY)
+@Schema(description = "Representation of the contact information of an owner of a namespace or an MRR")
+public class OwnerDTO implements JsonSerializable {
+    @Schema(description = "The name of the owner")
     private String name;
-    @Schema(description = "The mail for the point of contact of the namespace owner", accessMode = READ_ONLY)
+    @Schema(description = "The mail for the point of contact of the owner")
     private String email;
-    @Schema(description = "The phone number for the point of contact of the namespace owner", accessMode = READ_ONLY)
+    @Schema(description = "The phone number for the point of contact of the owner")
     private String phone;
-    @Schema(description = "The URL for the website of the namespace owner", accessMode = READ_ONLY)
+    @Schema(description = "The URL for the website of the owner")
     private String url;
-    @Schema(description = "The address of the namespace owner", accessMode = READ_ONLY)
+    @Schema(description = "The address of the owner")
     private String address;
-    @Schema(description = "The country of the namespace owner", accessMode = READ_ONLY)
+    @Schema(description = "The country of the owner")
     private String country;
 
-    public NamespaceOwnerDTO(NamespaceOwner namespaceOwner) {
-        this.name = namespaceOwner.getName();
-        this.email = namespaceOwner.getEmail();
-        this.phone = namespaceOwner.getPhone();
-        this.url = namespaceOwner.getUrl();
-        this.address = namespaceOwner.getAddress();
-        this.country = namespaceOwner.getCountry();
+    public OwnerDTO(Owner owner) {
+        this.name = owner.getName();
+        this.email = owner.getEmail();
+        this.phone = owner.getPhone();
+        this.url = owner.getUrl();
+        this.address = owner.getAddress();
+        this.country = owner.getCountry();
     }
 }

@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.iala_aism.mrr.model.dto.OwnerDTO;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -32,8 +33,8 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Node("NamespaceOwner")
-public class NamespaceOwner {
+@Node("Owner")
+public class Owner {
     @Id
     @GeneratedValue
     private Long id;
@@ -49,6 +50,17 @@ public class NamespaceOwner {
     private String address;
     @Property
     private String country;
-    @Relationship(value = "OWNS")
+    @Relationship(value = "OWNS_NAMESPACE")
     private Set<NamespaceSyntax> ownedNamespaces;
+    @Relationship(value = "OWNS_MRR")
+    private Set<MrrEntity> ownedMrrs;
+
+    public Owner(OwnerDTO ownerDTO) {
+        this.name = ownerDTO.getName();
+        this.email = ownerDTO.getEmail();
+        this.phone = ownerDTO.getPhone();
+        this.url = ownerDTO.getUrl();
+        this.address = ownerDTO.getAddress();
+        this.country = ownerDTO.getCountry();
+    }
 }

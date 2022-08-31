@@ -18,6 +18,7 @@ package org.iala_aism.mrr.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import org.iala_aism.mrr.exceptions.MrrRestException;
+import org.iala_aism.mrr.model.Owner;
 import org.iala_aism.mrr.model.dto.MrrDTO;
 import org.iala_aism.mrr.model.MrrEntity;
 import org.iala_aism.mrr.model.NamespaceEntity;
@@ -191,7 +192,7 @@ public class MrrController {
         if (namespace == null) {
             namespace = namespaceService.createNamespace(mrrDTO.getMrnNamespace());
         }
-        MrrEntity newMrr = new MrrEntity(mrrDTO.getMrnNamespace(), mrrDTO.getEndpoint());
+        MrrEntity newMrr = new MrrEntity(mrrDTO.getMrnNamespace(), mrrDTO.getEndpoint(), new Owner(mrrDTO.getOwner()));
         newMrr.setNamespace(namespace);
         return mrrService.save(newMrr);
     }
