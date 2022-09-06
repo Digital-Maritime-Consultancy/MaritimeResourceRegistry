@@ -16,6 +16,7 @@
 
 package org.iala_aism.mrr.model.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ import org.iala_aism.mrr.model.JsonSerializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "Object that holds the necessary information for registering an MRN namespace syntax")
 public class SyntaxCreationDTO implements JsonSerializable {
     private String namespace;
     private String parentNamespace;
