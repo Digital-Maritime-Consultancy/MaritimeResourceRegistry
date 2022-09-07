@@ -120,4 +120,18 @@ public class NamespaceSyntaxController {
         connectionManager.start();
         return ResponseEntity.accepted().build();
     }
+
+    @GetMapping(
+            value = "/{mrnNamespace}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @PreAuthorize("@accessControlUtil.canManageNamespace(#mrnNamespace)")
+    public ResponseEntity<SyntaxCreationResult> getSyntaxCreationStatus(@PathVariable String mrnNamespace, HttpServletRequest request) throws MrrRestException {
+        SyntaxCreationResult result = syntaxCreationResultMap.get(mrnNamespace);
+        if (result == null) {
+            throw new MrrRestException(HttpStatus.NOT_FOUND,
+                    "The syntax creation status for the given MRN namespace could not be found", request.getServletPath());
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }
