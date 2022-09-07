@@ -54,6 +54,7 @@ public class MrrWebSocketHandler extends TextWebSocketHandler {
         TextMessage requestMessage = new TextMessage(requestJson);
         SyntaxCreationResult tmpResult = new SyntaxCreationResult();
         tmpResult.setCode(SyntaxCreationStatus.CREATING);
+        syntaxCreationResultMap.put(syntaxCreationDTO.getNamespace(), tmpResult);
         session.sendMessage(requestMessage);
     }
 
