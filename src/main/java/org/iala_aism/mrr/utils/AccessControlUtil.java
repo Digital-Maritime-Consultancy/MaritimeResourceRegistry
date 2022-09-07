@@ -29,7 +29,7 @@ import java.util.List;
 public class AccessControlUtil {
 
     public boolean canManageNamespace(String mrn) {
-        log.debug("Checking if user is allowed to manage namespace {}", mrn);
+        log.debug("Checking if user is allowed to manage namespace \"{}\"", mrn);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth.isAuthenticated() && auth instanceof JwtAuthenticationToken jwtAuthenticationToken) {
             List<String> managesNamespaces = jwtAuthenticationToken.getToken().getClaimAsStringList("manages_namespaces");
@@ -42,7 +42,7 @@ public class AccessControlUtil {
                 }
             }
         }
-        log.debug("User is not allowed to manage namespace {}", mrn);
+        log.debug("User is not allowed to manage namespace \"{}\"", mrn);
         return false;
     }
 }
