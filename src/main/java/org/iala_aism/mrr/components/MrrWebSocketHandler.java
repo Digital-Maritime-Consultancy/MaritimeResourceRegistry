@@ -72,7 +72,7 @@ public class MrrWebSocketHandler extends TextWebSocketHandler {
         String messageJson = message.getPayload();
         SyntaxCreationResult result = mapper.readValue(messageJson, SyntaxCreationResult.class);
         if (SyntaxCreationStatus.ERROR.equals(result.getCode())) {
-            log.error("Syntax creation for namespace {} failed: {}", syntaxCreationDTO.getNamespace(), result.getMessage());
+            log.error("Syntax creation for namespace {} failed: \"{}\"", syntaxCreationDTO.getNamespace(), result.getMessage());
         } else if (!syntaxCreationDTO.getNamespace().equals(result.getNamespace())) {
             result = new SyntaxCreationResult();
             result.setMessage("The MRN namespace of the returned response did not match the MRN namespace of the original request");
