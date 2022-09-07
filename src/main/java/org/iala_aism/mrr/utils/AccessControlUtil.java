@@ -36,7 +36,7 @@ public class AccessControlUtil {
             if (managesNamespaces != null && !managesNamespaces.isEmpty()) {
                 for (String namespace : managesNamespaces) {
                     if (!namespace.isBlank() && mrn.startsWith(namespace)) {
-                        log.debug("User is allowed to manage namespace {}", mrn);
+                        log.debug("User is allowed to manage namespace \"{}\"", mrn);
                         return true;
                     }
                 }
