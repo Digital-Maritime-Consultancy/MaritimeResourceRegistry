@@ -18,10 +18,10 @@ package org.iala_aism.mrr.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import org.iala_aism.mrr.exceptions.MrrRestException;
-import org.iala_aism.mrr.model.dto.MaritimeResourceDTO;
 import org.iala_aism.mrr.model.MaritimeResourceEntity;
 import org.iala_aism.mrr.model.MrrEntity;
 import org.iala_aism.mrr.model.NamespaceSyntax;
+import org.iala_aism.mrr.model.dto.MaritimeResourceDTO;
 import org.iala_aism.mrr.services.MaritimeResourceService;
 import org.iala_aism.mrr.services.MrrService;
 import org.iala_aism.mrr.services.NamespaceService;

@@ -16,7 +16,6 @@
 
 package org.iala_aism.mrr.components;
 
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.iala_aism.mrr.model.SyntaxCreationRequest;

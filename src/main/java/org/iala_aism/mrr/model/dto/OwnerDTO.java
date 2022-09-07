@@ -24,8 +24,6 @@ import lombok.Setter;
 import org.iala_aism.mrr.model.JsonSerializable;
 import org.iala_aism.mrr.model.Owner;
 
-import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
-
 @Getter
 @Setter
 @AllArgsConstructor
