@@ -121,7 +121,7 @@ public class NamespaceSyntaxController {
     }
 
     @GetMapping(
-            value = "/{mrnNamespace}",
+            value = "/status/{mrnNamespace}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @PreAuthorize("@accessControlUtil.canManageNamespace(#mrnNamespace)")
