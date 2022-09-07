@@ -20,25 +20,30 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.iala_aism.mrr.model.SyntaxCreationRequest;
 import org.iala_aism.mrr.model.SyntaxCreationResult;
+import org.iala_aism.mrr.model.SyntaxCreationResultRedis;
 import org.iala_aism.mrr.model.dto.SyntaxCreationDTO;
 import org.iala_aism.mrr.model.enums.SyntaxCreationStatus;
+import org.iala_aism.mrr.services.SyntaxCreationStatusService;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 public class MrrWebSocketHandler extends TextWebSocketHandler {
 
     private final SyntaxCreationDTO syntaxCreationDTO;
-    private final Map<String, SyntaxCreationResult> syntaxCreationResultMap;
+    private final SyntaxCreationStatusService creationStatusService;
+    private final SyntaxCreationResultRedis creationResultRedis;
     private final ObjectMapper mapper;
 
-    public MrrWebSocketHandler(SyntaxCreationDTO syntaxCreationDTO, Map<String, SyntaxCreationResult> syntaxCreationResultMap, ObjectMapper mapper) {
+    public MrrWebSocketHandler(SyntaxCreationDTO syntaxCreationDTO, SyntaxCreationStatusService creationStatusService,
+                               SyntaxCreationResultRedis creationResultRedis, ObjectMapper mapper) {
         this.syntaxCreationDTO = syntaxCreationDTO;
-        this.syntaxCreationResultMap = syntaxCreationResultMap;
+        this.creationStatusService = creationStatusService;
+        this.creationResultRedis = creationResultRedis;
         this.mapper = mapper;
     }
 
@@ -51,9 +56,6 @@ public class MrrWebSocketHandler extends TextWebSocketHandler {
                 syntaxCreationDTO.getNamespaceOwner());
         String requestJson = mapper.writeValueAsString(request);
         TextMessage requestMessage = new TextMessage(requestJson);
-        SyntaxCreationResult tmpResult = new SyntaxCreationResult();
-        tmpResult.setCode(SyntaxCreationStatus.CREATING);
-        syntaxCreationResultMap.put(syntaxCreationDTO.getNamespace(), tmpResult);
         session.sendMessage(requestMessage);
     }
 
@@ -77,8 +79,15 @@ public class MrrWebSocketHandler extends TextWebSocketHandler {
             result = new SyntaxCreationResult();
             result.setMessage("The MRN namespace of the returned response did not match the MRN namespace of the original request");
             result.setCode(SyntaxCreationStatus.ERROR);
+            result.setNamespace(syntaxCreationDTO.getNamespace());
         }
-        syntaxCreationResultMap.put(syntaxCreationDTO.getNamespace(), result);
+        Optional<SyntaxCreationResultRedis> maybeResultRedis = creationStatusService.getById(creationResultRedis.getId());
+        if (maybeResultRedis.isEmpty()) {
+            log.warn("An existing creation status could not be found for \"{}\"", syntaxCreationDTO.getNamespace());
+        }
+        SyntaxCreationResultRedis resultRedis = maybeResultRedis.orElse(new SyntaxCreationResultRedis());
+        resultRedis.copyValuesFrom(result);
+        creationStatusService.save(resultRedis);
     }
 
     @Override

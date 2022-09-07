@@ -23,10 +23,14 @@ import org.iala_aism.mrr.exceptions.MrrRestException;
 import org.iala_aism.mrr.model.MrrEntity;
 import org.iala_aism.mrr.model.NamespaceSyntax;
 import org.iala_aism.mrr.model.SyntaxCreationResult;
+import org.iala_aism.mrr.model.SyntaxCreationResultRedis;
 import org.iala_aism.mrr.model.dto.NamespaceSyntaxDTO;
 import org.iala_aism.mrr.model.dto.SyntaxCreationDTO;
+import org.iala_aism.mrr.model.enums.SyntaxCreationStatus;
 import org.iala_aism.mrr.services.MrrService;
 import org.iala_aism.mrr.services.NamespaceSyntaxService;
+import org.iala_aism.mrr.services.SyntaxCreationStatusService;
+import org.iala_aism.mrr.utils.AccessControlUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -43,9 +47,7 @@ import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping("/syntax")
@@ -53,9 +55,10 @@ public class NamespaceSyntaxController {
 
     private NamespaceSyntaxService namespaceSyntaxService;
     private MrrService mrrService;
+    private SyntaxCreationStatusService creationStatusService;
     private ObjectMapper mapper;
 
-    private final Map<String, SyntaxCreationResult> syntaxCreationResultMap = new ConcurrentHashMap<>();
+    private AccessControlUtil accessControlUtil;
 
     @Value("${org.iala_aism.mrr.websocket-url}")
     private String webSocketUrl;
@@ -71,8 +74,18 @@ public class NamespaceSyntaxController {
     }
 
     @Autowired
+    public void setCreationStatusService(SyntaxCreationStatusService creationStatusService) {
+        this.creationStatusService = creationStatusService;
+    }
+
+    @Autowired
     public void setMapper(ObjectMapper mapper) {
         this.mapper = mapper;
+    }
+
+    @Autowired
+    public void setAccessControlUtil(AccessControlUtil accessControlUtil) {
+        this.accessControlUtil = accessControlUtil;
     }
 
     @GetMapping(
@@ -110,26 +123,33 @@ public class NamespaceSyntaxController {
             path = "/"
     )
     @PreAuthorize("@accessControlUtil.canManageNamespace(#syntaxCreationDTO.namespace)")
-    public ResponseEntity<Void> createNamespaceSyntax(@RequestBody SyntaxCreationDTO syntaxCreationDTO) {
+    public ResponseEntity<String> createNamespaceSyntax(@RequestBody SyntaxCreationDTO syntaxCreationDTO) {
+        SyntaxCreationResultRedis tmpResult = new SyntaxCreationResultRedis();
+        tmpResult.setCode(SyntaxCreationStatus.CREATING);
+        tmpResult.setNamespace(syntaxCreationDTO.getNamespace());
+        SyntaxCreationResultRedis result = creationStatusService.save(tmpResult);
         WebSocketConnectionManager connectionManager = new WebSocketConnectionManager(
                 new StandardWebSocketClient(),
-                new MrrWebSocketHandler(syntaxCreationDTO, syntaxCreationResultMap, mapper),
+                new MrrWebSocketHandler(syntaxCreationDTO, creationStatusService, result, mapper),
                 webSocketUrl
         );
         connectionManager.start();
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.accepted().body(tmpResult.getId());
     }
 
     @GetMapping(
-            value = "/status/{mrnNamespace}",
+            value = "/status/{creationId}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @PreAuthorize("@accessControlUtil.canManageNamespace(#mrnNamespace)")
-    public ResponseEntity<SyntaxCreationResult> getSyntaxCreationStatus(@PathVariable String mrnNamespace, HttpServletRequest request) throws MrrRestException {
-        SyntaxCreationResult result = syntaxCreationResultMap.get(mrnNamespace);
-        if (result == null) {
+    public ResponseEntity<SyntaxCreationResult> getSyntaxCreationStatus(@PathVariable String creationId, HttpServletRequest request) throws MrrRestException {
+        Optional<SyntaxCreationResultRedis> resultRedis = creationStatusService.getById(creationId);
+        if (resultRedis.isEmpty()) {
             throw new MrrRestException(HttpStatus.NOT_FOUND,
                     "The syntax creation status for the given MRN namespace could not be found", request.getServletPath());
+        }
+        SyntaxCreationResult result = resultRedis.get();
+        if (!accessControlUtil.canManageNamespace(result.getNamespace())) {
+            throw new MrrRestException(HttpStatus.FORBIDDEN, "You are not allowed to see this resource", request.getServletPath());
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
