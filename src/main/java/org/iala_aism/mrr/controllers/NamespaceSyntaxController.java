@@ -56,15 +56,10 @@ public class NamespaceSyntaxController {
     private MrrService mrrService;
     private ObjectMapper mapper;
 
-    private Map<String, SyntaxCreationResult> syntaxCreationResultMap;
+    private final Map<String, SyntaxCreationResult> syntaxCreationResultMap = new ConcurrentHashMap<>();
 
     @Value("${org.iala_aism.mrr.websocket-url}")
     private String webSocketUrl;
-
-    @PostConstruct
-    public void init() {
-        syntaxCreationResultMap = new ConcurrentHashMap<>();
-    }
 
     @Autowired
     public void setNamespaceSyntaxService(NamespaceSyntaxService namespaceSyntaxService) {
