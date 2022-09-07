@@ -60,8 +60,8 @@ public class MrrWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         super.afterConnectionClosed(session, status);
-        log.debug("WebSocket connection closed");
-        if (status != CloseStatus.NORMAL) {
+        log.debug("WebSocket connection closed with status code {}", status.getCode());
+        if (!status.equals(CloseStatus.NORMAL)) {
             log.error("WebSocket connection didn't close normally");
         }
     }
