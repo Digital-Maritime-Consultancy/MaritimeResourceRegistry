@@ -26,5 +26,5 @@ public enum SyntaxCreationStatus {
     @JsonProperty("ERROR")
     ERROR,
     @JsonProperty("OK")
-    OK;
+    OK
 }

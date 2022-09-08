@@ -122,6 +122,9 @@ public class NamespaceSyntaxController {
     @PostMapping(
             path = "/"
     )
+    @Operation(
+            description = "Creates a new MRN namespace syntax and returns an ID that can be used to retrieve the status of the creation"
+    )
     @PreAuthorize("@accessControlUtil.canManageNamespace(#syntaxCreationDTO.namespace)")
     public ResponseEntity<String> createNamespaceSyntax(@RequestBody SyntaxCreationDTO syntaxCreationDTO) {
         SyntaxCreationResultRedis tmpResult = new SyntaxCreationResultRedis();
@@ -140,6 +143,9 @@ public class NamespaceSyntaxController {
     @GetMapping(
             value = "/status/{creationId}",
             produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(
+            description = "Returns the creation status for the given ID"
     )
     public ResponseEntity<SyntaxCreationResult> getSyntaxCreationStatus(@PathVariable String creationId, HttpServletRequest request) throws MrrRestException {
         Optional<SyntaxCreationResultRedis> resultRedis = creationStatusService.getById(creationId);

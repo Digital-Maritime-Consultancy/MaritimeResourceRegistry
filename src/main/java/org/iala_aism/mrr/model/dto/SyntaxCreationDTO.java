@@ -29,8 +29,12 @@ import org.iala_aism.mrr.model.JsonSerializable;
 @NoArgsConstructor
 @Schema(description = "Object that holds the necessary information for registering an MRN namespace syntax")
 public class SyntaxCreationDTO implements JsonSerializable {
+    @Schema(description = "The MRN namespace that the syntax describes")
     private String namespace;
+    @Schema(description = "The parent MRN namespace that the syntax is a subset of")
     private String parentNamespace;
+    @Schema(description = "The ABNF syntax of the MRN namespace")
     private String abnfSyntax;
+    @Schema(description = "Contact information about the owner of the MRN namespace")
     private OwnerDTO namespaceOwner;
 }

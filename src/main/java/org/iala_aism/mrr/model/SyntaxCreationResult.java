@@ -16,15 +16,21 @@
 
 package org.iala_aism.mrr.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import org.iala_aism.mrr.model.enums.SyntaxCreationStatus;
 
 @Getter
 @Setter
+@Schema(description = "Object representing the result of a namespace syntax creation")
 public class SyntaxCreationResult implements JsonSerializable {
+    @Schema(description = "The status of the creation")
     private SyntaxCreationStatus code;
+    @Schema(description = "The MRN namespace of the created syntax")
     private String namespace;
+    @Schema(description = "A regular expression generated from the created syntax")
     private String regex;
+    @Schema(description = "An error message that is set if the creation results in an error")
     private String message;
 }
