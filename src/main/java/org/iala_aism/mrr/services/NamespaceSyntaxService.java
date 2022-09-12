@@ -38,8 +38,12 @@ public class NamespaceSyntaxService {
     public NamespaceSyntax findNamespaceSyntaxForMrn(String mrn) {
         NamespaceSyntax syntax = repository.findByMrnNamespace(mrn);
         while (syntax == null) {
-            mrn = mrn.substring(0, mrn.lastIndexOf(':'));
-            syntax = repository.findByMrnNamespace(mrn);
+            if (mrn.lastIndexOf(':') > 0) {
+                mrn = mrn.substring(0, mrn.lastIndexOf(':'));
+                syntax = repository.findByMrnNamespace(mrn);
+            } else {
+                break;
+            }
         }
         return syntax;
     }
