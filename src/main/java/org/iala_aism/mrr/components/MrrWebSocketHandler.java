@@ -79,8 +79,8 @@ public class MrrWebSocketHandler extends TextWebSocketHandler {
             result = new SyntaxCreationResult();
             result.setMessage("The MRN namespace of the returned response did not match the MRN namespace of the original request");
             result.setCode(SyntaxCreationStatus.ERROR);
-            result.setNamespace(syntaxCreationDTO.getNamespace());
         }
+        result.setNamespace(syntaxCreationDTO.getNamespace());
         Optional<SyntaxCreationResultRedis> maybeResultRedis = creationStatusService.getById(creationResultRedis.getId());
         if (maybeResultRedis.isEmpty()) {
             log.warn("An existing creation status could not be found for \"{}\"", syntaxCreationDTO.getNamespace());
