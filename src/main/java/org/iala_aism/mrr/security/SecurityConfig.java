@@ -41,8 +41,8 @@ public class SecurityConfig {
         http
                 .addFilterBefore(simpleCorsFilter, ChannelProcessingFilter.class)
                 .authorizeRequests(authz -> authz
-                        .mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .mvcMatchers(HttpMethod.GET, "/**").permitAll()
+                        .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
