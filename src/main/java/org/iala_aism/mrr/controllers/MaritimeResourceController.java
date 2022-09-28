@@ -256,6 +256,7 @@ public class MaritimeResourceController {
         Pattern pattern = Pattern.compile(syntax.getRegex());
         if (pattern.matcher(entity.getMrn()).matches()) {
             entity.setNamespace(namespaceService.createNamespace(entity.getMrn()));
+            entity.setSyntax(syntax);
             return resourceService.save(entity);
         } else {
             throw new URISyntaxException(entity.getMrn(),

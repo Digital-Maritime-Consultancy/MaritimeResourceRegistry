@@ -59,6 +59,9 @@ public class MaritimeResourceEntity {
     @Relationship(value = "FOLLOWS")
     private NamespaceEntity namespace;
 
+    @Relationship(value = "FOLLOWS_SYNTAX")
+    private NamespaceSyntax syntax;
+
     public MaritimeResourceEntity(String mrn, String version, String location, String name, String description) {
         this.mrn = mrn;
         this.version = version;
