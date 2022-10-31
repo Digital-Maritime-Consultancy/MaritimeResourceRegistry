@@ -31,8 +31,11 @@ import org.iala_aism.mrr.services.MrrService;
 import org.iala_aism.mrr.services.NamespaceSyntaxService;
 import org.iala_aism.mrr.services.SyntaxCreationStatusService;
 import org.iala_aism.mrr.utils.AccessControlUtil;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -117,6 +120,18 @@ public class NamespaceSyntaxController {
             return new ResponseEntity<>(syntaxDTO, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(
+            path = "/all",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(
+            description = "Returns a page of all registered syntax definitions"
+    )
+    public Page<NamespaceSyntaxDTO> getAllNamespaceSyntaxes(@ParameterObject Pageable pageable) {
+        Page<NamespaceSyntax> syntaxPage = namespaceSyntaxService.getAll(pageable);
+        return syntaxPage.map(NamespaceSyntaxDTO::new);
     }
 
     @PostMapping(

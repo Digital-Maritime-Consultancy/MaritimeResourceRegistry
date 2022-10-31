@@ -19,6 +19,8 @@ package org.iala_aism.mrr.services;
 import org.iala_aism.mrr.model.NamespaceSyntax;
 import org.iala_aism.mrr.repositories.NamespaceSyntaxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -46,5 +48,9 @@ public class NamespaceSyntaxService {
             }
         }
         return syntax;
+    }
+
+    public Page<NamespaceSyntax> getAll(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 }
