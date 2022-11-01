@@ -27,21 +27,21 @@ import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 @Schema(description = "Object representing the syntax definition for a MRN namespace")
 public class NamespaceSyntaxDTO implements JsonSerializable {
     @Schema(description = "The MRN namespace that this syntax describes", accessMode = READ_ONLY)
-    private final String namespace;
+    private final String mrnNamespace;
     @Schema(description = "The ABNF syntax", accessMode = READ_ONLY)
     private final String abnfSyntax;
     @Schema(description = "A regular expression derived from the ABNF syntax", accessMode = READ_ONLY)
     private final String regex;
     @Schema(description = "The contact information of the namespace owner", accessMode = READ_ONLY)
-    private final OwnerDTO namespaceOwner;
+    private final OwnerDTO owner;
     @Schema(description = "The unique ID of the namespace syntax", accessMode = READ_ONLY)
     private final long id;
 
     public NamespaceSyntaxDTO(NamespaceSyntax namespaceSyntax) {
-        this.namespace = namespaceSyntax.getNamespace().getMrnNamespace();
+        this.mrnNamespace = namespaceSyntax.getNamespace().getMrnNamespace();
         this.abnfSyntax = namespaceSyntax.getAbnfSyntax();
         this.regex = namespaceSyntax.getRegex();
-        this.namespaceOwner = new OwnerDTO(namespaceSyntax.getOwner());
+        this.owner = new OwnerDTO(namespaceSyntax.getOwner());
         this.id = namespaceSyntax.getId();
     }
 }
