@@ -19,12 +19,12 @@ package org.iala_aism.mrr.repositories;
 import org.iala_aism.mrr.model.MaritimeResourceEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.neo4j.repository.Neo4jRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface MaritimeResourceRepository extends PagingAndSortingRepository<MaritimeResourceEntity, Long> {
+public interface MaritimeResourceRepository extends Neo4jRepository<MaritimeResourceEntity, Long> {
 
     Page<MaritimeResourceEntity> getAllByMrn(String mrn, Pageable pageable);
 

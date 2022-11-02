@@ -17,8 +17,8 @@
 package org.iala_aism.mrr.repositories;
 
 import org.iala_aism.mrr.model.NamespaceSyntax;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.neo4j.repository.Neo4jRepository;
 
-public interface NamespaceSyntaxRepository extends PagingAndSortingRepository<NamespaceSyntax, Long> {
+public interface NamespaceSyntaxRepository extends Neo4jRepository<NamespaceSyntax, Long> {
     NamespaceSyntax findByMrnNamespace(String mrnNamespace);
 }
