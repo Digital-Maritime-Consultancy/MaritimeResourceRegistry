@@ -97,4 +97,8 @@ public class MaritimeResourceService {
     public Page<MaritimeResourceEntity> getAll(Pageable pageable) {
         return repository.findAll(pageable);
     }
+
+    public Page<MaritimeResourceEntity> getAllStartingWithNamespace(String namespace, Pageable pageable) {
+        return repository.findAllByMrnStartingWith(namespace, pageable);
+    }
 }

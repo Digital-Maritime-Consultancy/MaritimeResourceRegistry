@@ -124,6 +124,18 @@ public class MaritimeResourceController {
     }
 
     @GetMapping(
+            path = "/all/{namespace}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(
+            description = "Returns a page of all registered resources under the given MRN namespace."
+    )
+    public Page<MaritimeResourceDTO> getAllMaritimeResourcesUnderNamespace(@PathVariable String namespace, @ParameterObject Pageable pageable) {
+        Page<MaritimeResourceEntity> resourceEntityPage = resourceService.getAllStartingWithNamespace(namespace, pageable);
+        return resourceEntityPage.map(MaritimeResourceDTO::new);
+    }
+
+    @GetMapping(
             value = "/{mrn}/{version}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )

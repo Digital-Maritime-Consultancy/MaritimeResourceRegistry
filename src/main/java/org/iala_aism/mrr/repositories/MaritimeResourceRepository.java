@@ -35,5 +35,7 @@ public interface MaritimeResourceRepository extends Neo4jRepository<MaritimeReso
     @Override
     Optional<MaritimeResourceEntity> findById(Long id);
 
+    Page<MaritimeResourceEntity> findAllByMrnStartingWith(String namespace, Pageable pageable);
+
     void deleteByMrnAndVersion(String mrn, String version);
 }

@@ -51,7 +51,7 @@ public class NamespaceSyntaxService {
     }
 
     public Page<NamespaceSyntax> findNamespaceSyntaxesUnderNamespace(String namespace, Pageable pageable) {
-        return repository.findByMrnNamespaceStartingWith(namespace, pageable);
+        return repository.findAllByMrnNamespaceStartingWith(namespace, pageable);
     }
 
     public Page<NamespaceSyntax> getAll(Pageable pageable) {

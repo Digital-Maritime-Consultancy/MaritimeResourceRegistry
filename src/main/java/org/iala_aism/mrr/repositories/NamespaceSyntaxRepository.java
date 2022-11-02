@@ -24,5 +24,5 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 public interface NamespaceSyntaxRepository extends Neo4jRepository<NamespaceSyntax, Long> {
     NamespaceSyntax findByMrnNamespace(String mrnNamespace);
 
-    Page<NamespaceSyntax> findByMrnNamespaceStartingWith(String namespace, Pageable pageable);
+    Page<NamespaceSyntax> findAllByMrnNamespaceStartingWith(String namespace, Pageable pageable);
 }
