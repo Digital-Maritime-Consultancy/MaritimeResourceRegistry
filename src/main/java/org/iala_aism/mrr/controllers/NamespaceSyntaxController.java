@@ -134,6 +134,18 @@ public class NamespaceSyntaxController {
         return syntaxPage.map(NamespaceSyntaxDTO::new);
     }
 
+    @GetMapping(
+            path = "/all/{namespace}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(
+            description = "Returns a page of all syntax definitions that are registered under the given MRN namespace"
+    )
+    public Page<NamespaceSyntaxDTO> getAllNamespaceSyntaxesUnderNamespace(@PathVariable String namespace, @ParameterObject Pageable pageable) {
+        Page<NamespaceSyntax> syntaxPage = namespaceSyntaxService.findNamespaceSyntaxesUnderNamespace(namespace, pageable);
+        return syntaxPage.map(NamespaceSyntaxDTO::new);
+    }
+
     @PostMapping(
             path = "/"
     )

@@ -17,8 +17,12 @@
 package org.iala_aism.mrr.repositories;
 
 import org.iala_aism.mrr.model.NamespaceSyntax;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 
 public interface NamespaceSyntaxRepository extends Neo4jRepository<NamespaceSyntax, Long> {
     NamespaceSyntax findByMrnNamespace(String mrnNamespace);
+
+    Page<NamespaceSyntax> findByMrnNamespaceStartingWith(String namespace, Pageable pageable);
 }
