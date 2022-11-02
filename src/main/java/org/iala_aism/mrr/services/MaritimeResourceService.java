@@ -79,7 +79,7 @@ public class MaritimeResourceService {
 
                 if (v1 < v2)
                     return -1;
-                else if(v1 > v2)
+                else if (v1 > v2)
                     return 1;
             }
             return 0;
@@ -94,7 +94,7 @@ public class MaritimeResourceService {
         return repository.getAllByMrn(mrn, pageable);
     }
 
-    public List<MaritimeResourceEntity> getAll() {
-        return (List<MaritimeResourceEntity>) repository.findAll();
+    public Page<MaritimeResourceEntity> getAll(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 }
