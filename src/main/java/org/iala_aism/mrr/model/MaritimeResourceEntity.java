@@ -42,7 +42,7 @@ public class MaritimeResourceEntity {
 
     @Property
     private String mrn;
-    
+
     @Property
     private String version;
 

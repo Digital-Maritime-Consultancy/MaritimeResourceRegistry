@@ -23,5 +23,6 @@ import java.util.Optional;
 
 public interface MrrRepository extends PagingAndSortingRepository<MrrEntity, Long> {
     Optional<MrrEntity> getByMrnNamespace(String mrnNamespace);
+
     void deleteByMrnNamespace(String mrnNamespace);
 }
