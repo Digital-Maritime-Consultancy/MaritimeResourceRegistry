@@ -17,35 +17,27 @@
 package org.iala_aism.mrr.security;
 
 import org.iala_aism.mrr.config.SimpleCorsFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private SimpleCorsFilter simpleCorsFilter;
-
-    @Autowired
-    public void setSimpleCorsFilter(SimpleCorsFilter simpleCorsFilter) {
-        this.simpleCorsFilter = simpleCorsFilter;
-    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .addFilterBefore(simpleCorsFilter, ChannelProcessingFilter.class)
-                .authorizeRequests(authz -> authz
-                        .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .antMatchers(HttpMethod.GET, "/**").permitAll()
+                .addFilterBefore(new SimpleCorsFilter(), ChannelProcessingFilter.class)
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
         return http.build();
     }
 }
