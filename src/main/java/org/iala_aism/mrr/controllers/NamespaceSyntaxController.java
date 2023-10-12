@@ -31,7 +31,7 @@ import org.iala_aism.mrr.services.MrrService;
 import org.iala_aism.mrr.services.NamespaceSyntaxService;
 import org.iala_aism.mrr.services.SyntaxCreationStatusService;
 import org.iala_aism.mrr.utils.AccessControlUtil;
-import org.springdoc.api.annotations.ParameterObject;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -49,7 +49,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.client.WebSocketConnectionManager;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @RestController
