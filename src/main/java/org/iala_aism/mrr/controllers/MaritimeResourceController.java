@@ -264,8 +264,7 @@ public class MaritimeResourceController {
         if (syntax == null) {
             throw new URISyntaxException("A syntax definition could not be found for the MRN of the resource", entity.getMrn());
         }
-        Pattern pattern = Pattern.compile(syntax.getRegex());
-        if (pattern.matcher(entity.getMrn()).matches()) {
+        if (Pattern.matches("^" + syntax.getRegex() + "$", entity.getMrn())) {
             entity.setNamespace(namespaceService.createNamespace(entity.getMrn()));
             return resourceService.save(entity);
         } else {
