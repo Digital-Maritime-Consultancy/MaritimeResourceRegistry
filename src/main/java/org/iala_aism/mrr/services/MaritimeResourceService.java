@@ -53,11 +53,11 @@ public class MaritimeResourceService {
     }
 
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         repository.deleteById(id);
     }
 
-    public Optional<MaritimeResourceEntity> getById(Long id) {
+    public Optional<MaritimeResourceEntity> getById(String id) {
         return repository.findById(id);
     }
 

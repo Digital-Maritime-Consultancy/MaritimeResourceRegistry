@@ -17,6 +17,8 @@
 package org.iala_aism.mrr.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.iala_aism.mrr.exceptions.MrrRestException;
 import org.iala_aism.mrr.model.MaritimeResourceEntity;
 import org.iala_aism.mrr.model.MrrEntity;
@@ -45,8 +47,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
@@ -172,7 +172,7 @@ public class MaritimeResourceController {
     @Operation(
             description = "Returns the resource with the given ID"
     )
-    public ResponseEntity<MaritimeResourceDTO> getResourceById(@PathVariable Long resourceId, HttpServletRequest request) throws MrrRestException {
+    public ResponseEntity<MaritimeResourceDTO> getResourceById(@PathVariable String resourceId, HttpServletRequest request) throws MrrRestException {
         Optional<MaritimeResourceEntity> resourceEntityOptional = resourceService.getById(resourceId);
         MaritimeResourceEntity resourceEntity = resourceEntityOptional.orElseThrow(
                 () -> new MrrRestException(HttpStatus.NOT_FOUND, COULD_NOT_BE_FOUND,
@@ -193,7 +193,7 @@ public class MaritimeResourceController {
         try {
             MaritimeResourceEntity newResource = handleCreation(maritimeResourceDTO, request);
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(new URI("/resource/id/" + newResource.getId().toString()));
+            headers.setLocation(new URI("/resource/id/" + newResource.getId()));
             return new ResponseEntity<>(new MaritimeResourceDTO(newResource), headers, HttpStatus.CREATED);
         } catch (URISyntaxException e) {
             throw new MrrRestException(HttpStatus.BAD_REQUEST, e.getMessage(), request.getServletPath());
@@ -220,7 +220,7 @@ public class MaritimeResourceController {
     @Operation(
             description = "Deletes the resource with the given ID"
     )
-    public void deleteResourceById(@PathVariable Long resourceId, HttpServletRequest request, HttpServletResponse response) throws MrrRestException {
+    public void deleteResourceById(@PathVariable String resourceId, HttpServletRequest request, HttpServletResponse response) throws MrrRestException {
         Optional<MaritimeResourceEntity> maybeResource = resourceService.getById(resourceId);
         if (maybeResource.isEmpty())
             throw new MrrRestException(HttpStatus.NOT_FOUND, COULD_NOT_BE_FOUND, request.getServletPath());

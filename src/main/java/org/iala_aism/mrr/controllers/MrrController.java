@@ -91,7 +91,7 @@ public class MrrController {
     @Operation(
             description = "Returns the MRR with given ID"
     )
-    public ResponseEntity<MrrDTO> getMrrById(@PathVariable Long mrrId, HttpServletRequest request) throws MrrRestException {
+    public ResponseEntity<MrrDTO> getMrrById(@PathVariable String mrrId, HttpServletRequest request) throws MrrRestException {
         MrrEntity mrr = mrrService.getById(mrrId)
                 .orElseThrow(() -> new MrrRestException(HttpStatus.NOT_FOUND,
                         "An MRR with the given ID could not be found", request.getServletPath()));
@@ -137,7 +137,7 @@ public class MrrController {
     @Operation(
             description = "Updates the MRR with the given ID"
     )
-    public void updateMrrById(@PathVariable Long mrrId, @Valid @RequestBody MrrDTO mrrDTO, HttpServletRequest request, HttpServletResponse response) throws MrrRestException {
+    public void updateMrrById(@PathVariable String mrrId, @Valid @RequestBody MrrDTO mrrDTO, HttpServletRequest request, HttpServletResponse response) throws MrrRestException {
         Optional<MrrEntity> maybeMrr = mrrService.getById(mrrId);
         if (maybeMrr.isEmpty())
             throw new MrrRestException(HttpStatus.NOT_FOUND, NAMESPACE_COULD_NOT_BE_FOUND, request.getServletPath());
@@ -170,7 +170,7 @@ public class MrrController {
     @Operation(
             description = "Deletes the MRR with the given ID"
     )
-    public void deleteById(@PathVariable Long mrrId, HttpServletRequest request, HttpServletResponse response) throws MrrRestException {
+    public void deleteById(@PathVariable String mrrId, HttpServletRequest request, HttpServletResponse response) throws MrrRestException {
         Optional<MrrEntity> maybeMrr = mrrService.getById(mrrId);
         if (maybeMrr.isEmpty())
             throw new MrrRestException(HttpStatus.NOT_FOUND, NAMESPACE_COULD_NOT_BE_FOUND, request.getServletPath());

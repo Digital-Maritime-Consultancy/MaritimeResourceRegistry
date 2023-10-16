@@ -34,7 +34,7 @@ import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
 @Schema(description = "Object representing a reference to another MRR")
 public class MrrDTO implements JsonSerializable {
     @Schema(description = "The unique ID of the MRR", accessMode = READ_ONLY)
-    private Long id;
+    private String id;
     @Schema(description = "The MRN namespace of the MRR")
     private String mrnNamespace;
     @URL(protocol = "https")

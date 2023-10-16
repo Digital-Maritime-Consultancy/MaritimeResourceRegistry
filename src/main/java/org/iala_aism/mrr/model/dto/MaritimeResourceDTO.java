@@ -45,7 +45,7 @@ public class MaritimeResourceDTO implements JsonSerializable {
     @Schema(description = "A description of the resource")
     private String description;
     @Schema(description = "The unique ID of the resource in the MRR", accessMode = READ_ONLY)
-    private long id;
+    private String id;
 
     public MaritimeResourceDTO(MaritimeResourceEntity maritimeResourceEntity) {
         this.mrn = maritimeResourceEntity.getMrn();
