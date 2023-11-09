@@ -4,7 +4,7 @@ The MRR is a registry for all maritime resources that are identified by a Mariti
 
 ## Prerequisites
 
-* Java 17
+* Java 21
 * Maven 3.8.1+
 * Redis
 * Neo4J

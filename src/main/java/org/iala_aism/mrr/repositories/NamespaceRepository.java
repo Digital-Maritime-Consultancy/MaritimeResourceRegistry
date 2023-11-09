@@ -19,7 +19,7 @@ package org.iala_aism.mrr.repositories;
 import org.iala_aism.mrr.model.NamespaceEntity;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 
-public interface NamespaceRepository extends Neo4jRepository<NamespaceEntity, Long> {
+public interface NamespaceRepository extends Neo4jRepository<NamespaceEntity, String> {
 
     NamespaceEntity findByMrnNamespace(String mrnNamespace);
 }

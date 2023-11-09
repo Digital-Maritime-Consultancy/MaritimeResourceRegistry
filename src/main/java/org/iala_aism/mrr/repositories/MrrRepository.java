@@ -21,7 +21,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 
 import java.util.Optional;
 
-public interface MrrRepository extends Neo4jRepository<MrrEntity, Long> {
+public interface MrrRepository extends Neo4jRepository<MrrEntity, String> {
     Optional<MrrEntity> getByMrnNamespace(String mrnNamespace);
 
     void deleteByMrnNamespace(String mrnNamespace);

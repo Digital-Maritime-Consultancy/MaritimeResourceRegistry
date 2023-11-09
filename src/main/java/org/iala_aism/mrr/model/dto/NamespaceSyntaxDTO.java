@@ -35,7 +35,7 @@ public class NamespaceSyntaxDTO implements JsonSerializable {
     @Schema(description = "The contact information of the namespace owner", accessMode = READ_ONLY)
     private final OwnerDTO owner;
     @Schema(description = "The unique ID of the namespace syntax", accessMode = READ_ONLY)
-    private final long id;
+    private final String id;
 
     public NamespaceSyntaxDTO(NamespaceSyntax namespaceSyntax) {
         this.mrnNamespace = namespaceSyntax.getNamespace().getMrnNamespace();

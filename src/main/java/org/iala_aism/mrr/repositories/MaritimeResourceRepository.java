@@ -24,16 +24,13 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface MaritimeResourceRepository extends Neo4jRepository<MaritimeResourceEntity, Long> {
+public interface MaritimeResourceRepository extends Neo4jRepository<MaritimeResourceEntity, String> {
 
     Page<MaritimeResourceEntity> getAllByMrn(String mrn, Pageable pageable);
 
     Optional<MaritimeResourceEntity> getByMrnAndVersion(String mrn, String version);
 
     List<MaritimeResourceEntity> getByMrn(String mrn);
-
-    @Override
-    Optional<MaritimeResourceEntity> findById(Long id);
 
     Page<MaritimeResourceEntity> findAllByMrnStartingWith(String namespace, Pageable pageable);
 

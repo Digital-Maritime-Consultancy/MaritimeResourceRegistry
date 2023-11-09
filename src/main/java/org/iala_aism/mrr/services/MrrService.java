@@ -51,7 +51,7 @@ public class MrrService {
     }
 
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         repository.deleteById(id);
     }
 
@@ -59,7 +59,7 @@ public class MrrService {
         return repository.getByMrnNamespace(mrnNamespace);
     }
 
-    public Optional<MrrEntity> getById(Long id) {
+    public Optional<MrrEntity> getById(String id) {
         return repository.findById(id);
     }
 

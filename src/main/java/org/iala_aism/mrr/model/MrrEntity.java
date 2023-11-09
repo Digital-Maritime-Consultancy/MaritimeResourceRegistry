@@ -26,6 +26,7 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
 import static org.springframework.data.neo4j.core.schema.Relationship.Direction.INCOMING;
 
@@ -37,8 +38,8 @@ import static org.springframework.data.neo4j.core.schema.Relationship.Direction.
 public class MrrEntity {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(UUIDStringGenerator.class)
+    private String id;
 
     @Property
     private String mrnNamespace;
